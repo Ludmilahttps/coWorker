@@ -1,0 +1,27 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div>
+            <img src="{% static 'homepage/logo.png' %}" alt="{% trans 'Logo' %}">
+            <span>CoWorkers</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">{% trans "Discover" %}</a></li>
+                <li><a href="#">{% trans "Trips" %}</a></li>
+                <li><a href="#">{% trans "Review" %}</a></li>
+                <li><a href="#">{% trans "More" %}</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+</body>
+</html>

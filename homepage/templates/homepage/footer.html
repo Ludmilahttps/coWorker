@@ -1,0 +1,155 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "CoWorkers Footer" %}</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        footer {
+            background-color: #203354;
+            /* Fundo Principal */
+            color: #F0F4F8;
+            /* Textos e Ícones Principais */
+            padding: 40px 20px;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px 20px;
+        }
+
+        .footer-section h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: #4A90E2;
+            /* Destaques e Botões */
+            margin-bottom: 15px;
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-family: 'Lato', sans-serif;
+            color: #F0F4F8;
+            /* Textos e Ícones Principais */
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #F0F4F8;
+            /* Textos e Ícones Principais */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #4A90E2;
+            /* Destaques e Botões */
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .newsletter-form input[type="email"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .newsletter-form button {
+            padding: 10px;
+            background-color: #4A90E2;
+            /* Destaques e Botões */
+            color: #F0F4F8;
+            /* Textos e Ícones Principais */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background-color: #007BFF;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-section {
+                margin: 20px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>{% trans "About" %}</h4>
+                <p>{% blocktrans %}CoWorkers connects remote and hybrid professionals with workspaces around the world.
+                    Our mission is to provide flexible and efficient work environments.{% endblocktrans %}</p>
+            </div>
+            <div class="footer-section">
+                <h4>{% trans "Customer Support" %}</h4>
+                <ul>
+                    <li><a href="/support">{% trans "Support" %}</a></li>
+                    <li><a href="/faq">{% trans "FAQs" %}</a></li>
+                    <li><a href="/return-policy">{% trans "Return Policy" %}</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>{% trans "Newsletter" %}</h4>
+                <form class="newsletter-form" method="post">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="{% trans 'Your email address' %}">
+                    <button type="submit">{% trans "Subscribe" %}</button>
+                </form>
+            </div>
+            <div class="footer-section">
+                <h4>{% trans "Blog" %}</h4>
+                <ul>
+                    <li><a href="/blog/latest">{% trans "Latest Posts" %}</a></li>
+                    <li><a href="/blog/category">{% trans "Categories" %}</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>{% trans "Contact" %}</h4>
+                <p>{% trans "Email" %}: contato@coworkers.com</p>
+                <p>{% trans "Phone" %}: (11) 1234-5678</p>
+                <p>{% trans "Address" %}: Rua Exemplo, 123, São Paulo, SP</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
