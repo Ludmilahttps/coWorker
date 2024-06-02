@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-01 21:10-0300\n"
+"POT-Creation-Date: 2024-06-01 22:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,108 +17,100 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: .\homepage\templates\homepage\footer.html:8
-msgid "CoWorkers Footer"
-msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:118
+#: .\homepage\templates\homepage\footer.html:5
 msgid "About"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:119
+#: .\homepage\templates\homepage\footer.html:6
 msgid ""
 "CoWorkers connects remote and hybrid professionals with workspaces around "
-"the world.\n"
-"                    Our mission is to provide flexible and efficient work "
+"the world. Our mission is to provide flexible and efficient work "
 "environments."
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:123
+#: .\homepage\templates\homepage\footer.html:9
 msgid "Customer Support"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:125
+#: .\homepage\templates\homepage\footer.html:11
 msgid "Support"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:126
+#: .\homepage\templates\homepage\footer.html:12
 msgid "FAQs"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:127
+#: .\homepage\templates\homepage\footer.html:13
 msgid "Return Policy"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:131
+#: .\homepage\templates\homepage\footer.html:17
 msgid "Newsletter"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:134
+#: .\homepage\templates\homepage\footer.html:20
 msgid "Your email address"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:135
+#: .\homepage\templates\homepage\footer.html:21
 msgid "Subscribe"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:139
+#: .\homepage\templates\homepage\footer.html:25
 msgid "Blog"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:141
+#: .\homepage\templates\homepage\footer.html:27
 msgid "Latest Posts"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:142
+#: .\homepage\templates\homepage\footer.html:28
 msgid "Categories"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:146
+#: .\homepage\templates\homepage\footer.html:32
 msgid "Contact"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:147
+#: .\homepage\templates\homepage\footer.html:33
 msgid "Email"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:148
+#: .\homepage\templates\homepage\footer.html:34
 msgid "Phone"
 msgstr ""
 
-#: .\homepage\templates\homepage\footer.html:149
+#: .\homepage\templates\homepage\footer.html:35
 msgid "Address"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:12
+#: .\homepage\templates\homepage\header.html:9
+msgid "Header Example"
+msgstr ""
+
+#: .\homepage\templates\homepage\header.html:16
 msgid "Logo"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:13
-msgid "CoWorkers"
-msgstr ""
-
-#: .\homepage\templates\homepage\header.html:17
+#: .\homepage\templates\homepage\header.html:21
 msgid "Discover"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:18
+#: .\homepage\templates\homepage\header.html:22
 msgid "Trips"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:19
+#: .\homepage\templates\homepage\header.html:23
 msgid "Review"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:20
+#: .\homepage\templates\homepage\header.html:24
 msgid "More"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:28
-msgid "English"
-msgstr ""
-
-#: .\homepage\templates\homepage\header.html:29
-msgid "Portuguese"
+#: .\homepage\templates\homepage\header.html:41
+msgid "Sign in"
 msgstr ""
 
 #: .\homepage\templates\homepage\home.html:3
@@ -135,4 +127,28 @@ msgstr ""
 
 #: .\homepage\templates\homepage\home.html:9
 msgid "Language:"
+msgstr ""
+
+#: .\setup\settings.py:93
+msgid "English"
+msgstr ""
+
+#: .\setup\settings.py:94
+msgid "Portuguese"
+msgstr ""
+
+#: .\setup\settings.py:95
+msgid "Spanish"
+msgstr ""
+
+#: .\setup\settings.py:96
+msgid "French"
+msgstr ""
+
+#: .\setup\settings.py:97
+msgid "German"
+msgstr ""
+
+#: .\setup\settings.py:98
+msgid "Italian"
 msgstr ""

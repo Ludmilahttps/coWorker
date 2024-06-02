@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-01 22:03-0300\n"
+"POT-Creation-Date: 2024-06-01 22:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,14 @@ msgid "About"
 msgstr "Acerca de"
 
 #: .\homepage\templates\homepage\footer.html:6
-msgid "CoWorkers connects remote and hybrid professionals with workspaces around the world. Our mission is to provide flexible and efficient work environments."
-msgstr "CoWorkers conecta a profesionales remotos e híbridos con espacios de trabajo en todo el mundo. Nuestra misión es proporcionar entornos de trabajo flexibles y eficientes."
+msgid ""
+"CoWorkers connects remote and hybrid professionals with workspaces around "
+"the world. Our mission is to provide flexible and efficient work "
+"environments."
+msgstr ""
+"CoWorkers conecta a profesionales remotos e híbridos con espacios de trabajo "
+"en todo el mundo. Nuestra misión es proporcionar entornos de trabajo "
+"flexibles y eficientes."
 
 #: .\homepage\templates\homepage\footer.html:9
 msgid "Customer Support"
@@ -82,33 +88,33 @@ msgstr "Teléfono"
 msgid "Address"
 msgstr "Dirección"
 
-#: .\homepage\templates\homepage\header.html:13
+#: .\homepage\templates\homepage\header.html:9
+msgid "Header Example"
+msgstr ""
+
+#: .\homepage\templates\homepage\header.html:16
 msgid "Logo"
 msgstr "Logo"
 
-#: .\homepage\templates\homepage\header.html:18
+#: .\homepage\templates\homepage\header.html:21
 msgid "Discover"
 msgstr "Descubrir"
 
-#: .\homepage\templates\homepage\header.html:19
+#: .\homepage\templates\homepage\header.html:22
 msgid "Trips"
 msgstr "Viajes"
 
-#: .\homepage\templates\homepage\header.html:20
+#: .\homepage\templates\homepage\header.html:23
 msgid "Review"
 msgstr "Revisar"
 
-#: .\homepage\templates\homepage\header.html:21
+#: .\homepage\templates\homepage\header.html:24
 msgid "More"
 msgstr "Más"
 
-#: .\homepage\templates\homepage\header.html:28
-msgid "English"
-msgstr "Inglés"
-
-#: .\homepage\templates\homepage\header.html:29
-msgid "Portuguese"
-msgstr "Portugués"
+#: .\homepage\templates\homepage\header.html:41
+msgid "Sign in"
+msgstr ""
 
 #: .\homepage\templates\homepage\home.html:3
 msgid "Home"
@@ -125,3 +131,27 @@ msgstr "País:"
 #: .\homepage\templates\homepage\home.html:9
 msgid "Language:"
 msgstr "Idioma:"
+
+#: .\setup\settings.py:93
+msgid "English"
+msgstr "Inglés"
+
+#: .\setup\settings.py:94
+msgid "Portuguese"
+msgstr "Portugués"
+
+#: .\setup\settings.py:95
+msgid "Spanish"
+msgstr ""
+
+#: .\setup\settings.py:96
+msgid "French"
+msgstr ""
+
+#: .\setup\settings.py:97
+msgid "German"
+msgstr ""
+
+#: .\setup\settings.py:98
+msgid "Italian"
+msgstr ""

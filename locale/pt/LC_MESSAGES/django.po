@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-01 21:05-0300\n"
+"POT-Creation-Date: 2024-06-01 22:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,105 +18,103 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\homepage\templates\homepage\footer.html:8
-msgid "CoWorkers Footer"
-msgstr "Rodapé do CoWorkers"
-
-#: .\homepage\templates\homepage\footer.html:118
+#: .\homepage\templates\homepage\footer.html:5
 msgid "About"
 msgstr "Sobre"
 
-#: .\homepage\templates\homepage\footer.html:119
-msgid "CoWorkers connects remote and hybrid professionals with workspaces around the world. Our mission is to provide flexible and efficient work environments."
-msgstr "O CoWorkers conecta profissionais remotos e híbridos com espaços de trabalho ao redor do mundo. Nossa missão é fornecer ambientes de trabalho flexíveis e eficientes."
+#: .\homepage\templates\homepage\footer.html:6
+msgid ""
+"CoWorkers connects remote and hybrid professionals with workspaces around "
+"the world. Our mission is to provide flexible and efficient work "
+"environments."
+msgstr ""
+"O CoWorkers conecta profissionais remotos e híbridos com espaços de trabalho "
+"ao redor do mundo. Nossa missão é fornecer ambientes de trabalho flexíveis e "
+"eficientes."
 
-#: .\homepage\templates\homepage\footer.html:123
+#: .\homepage\templates\homepage\footer.html:9
 msgid "Customer Support"
 msgstr "Suporte ao Cliente"
 
-#: .\homepage\templates\homepage\footer.html:125
+#: .\homepage\templates\homepage\footer.html:11
 msgid "Support"
 msgstr "Suporte"
 
-#: .\homepage\templates\homepage\footer.html:126
+#: .\homepage\templates\homepage\footer.html:12
 msgid "FAQs"
 msgstr "Perguntas Frequentes"
 
-#: .\homepage\templates\homepage\footer.html:127
+#: .\homepage\templates\homepage\footer.html:13
 msgid "Return Policy"
 msgstr "Política de Devolução"
 
-#: .\homepage\templates\homepage\footer.html:131
+#: .\homepage\templates\homepage\footer.html:17
 msgid "Newsletter"
 msgstr "Boletim Informativo"
 
-#: .\homepage\templates\homepage\footer.html:134
+#: .\homepage\templates\homepage\footer.html:20
 msgid "Your email address"
 msgstr "Seu endereço de email"
 
-#: .\homepage\templates\homepage\footer.html:135
+#: .\homepage\templates\homepage\footer.html:21
 msgid "Subscribe"
 msgstr "Assinar"
 
-#: .\homepage\templates\homepage\footer.html:139
+#: .\homepage\templates\homepage\footer.html:25
 msgid "Blog"
 msgstr "Blog"
 
-#: .\homepage\templates\homepage\footer.html:141
+#: .\homepage\templates\homepage\footer.html:27
 msgid "Latest Posts"
 msgstr "Últimas Postagens"
 
-#: .\homepage\templates\homepage\footer.html:142
+#: .\homepage\templates\homepage\footer.html:28
 msgid "Categories"
 msgstr "Categorias"
 
-#: .\homepage\templates\homepage\footer.html:146
+#: .\homepage\templates\homepage\footer.html:32
 msgid "Contact"
 msgstr "Contato"
 
-#: .\homepage\templates\homepage\footer.html:147
+#: .\homepage\templates\homepage\footer.html:33
 msgid "Email"
 msgstr "Email"
 
-#: .\homepage\templates\homepage\footer.html:148
+#: .\homepage\templates\homepage\footer.html:34
 msgid "Phone"
 msgstr "Telefone"
 
-#: .\homepage\templates\homepage\footer.html:149
+#: .\homepage\templates\homepage\footer.html:35
 msgid "Address"
 msgstr "Endereço"
 
-#: .\homepage\templates\homepage\header.html:12
+#: .\homepage\templates\homepage\header.html:9
+msgid "Header Example"
+msgstr ""
+
+#: .\homepage\templates\homepage\header.html:16
 msgid "Logo"
 msgstr "Logotipo"
 
-#: .\homepage\templates\homepage\header.html:13
-msgid "CoWorkers"
-msgstr "CoWorkers"
-
-#: .\homepage\templates\homepage\header.html:17
+#: .\homepage\templates\homepage\header.html:21
 msgid "Discover"
 msgstr "Descobrir"
 
-#: .\homepage\templates\homepage\header.html:18
+#: .\homepage\templates\homepage\header.html:22
 msgid "Trips"
 msgstr "Viagens"
 
-#: .\homepage\templates\homepage\header.html:19
+#: .\homepage\templates\homepage\header.html:23
 msgid "Review"
 msgstr "Revisar"
 
-#: .\homepage\templates\homepage\header.html:20
+#: .\homepage\templates\homepage\header.html:24
 msgid "More"
 msgstr "Mais"
 
-#: .\homepage\templates\homepage\header.html:28
-msgid "English"
-msgstr "Inglês"
-
-#: .\homepage\templates\homepage\header.html:29
-msgid "Portuguese"
-msgstr "Português"
+#: .\homepage\templates\homepage\header.html:41
+msgid "Sign in"
+msgstr ""
 
 #: .\homepage\templates\homepage\home.html:3
 msgid "Home"
@@ -133,3 +131,33 @@ msgstr "País:"
 #: .\homepage\templates\homepage\home.html:9
 msgid "Language:"
 msgstr "Idioma:"
+
+#: .\setup\settings.py:93
+msgid "English"
+msgstr "Inglês"
+
+#: .\setup\settings.py:94
+msgid "Portuguese"
+msgstr "Português"
+
+#: .\setup\settings.py:95
+msgid "Spanish"
+msgstr "Epanhol"
+
+#: .\setup\settings.py:96
+msgid "French"
+msgstr "Francês"
+
+#: .\setup\settings.py:97
+msgid "German"
+msgstr "Alemão"
+
+#: .\setup\settings.py:98
+msgid "Italian"
+msgstr "Italiano"
+
+#~ msgid "CoWorkers Footer"
+#~ msgstr "Rodapé do CoWorkers"
+
+#~ msgid "CoWorkers"
+#~ msgstr "CoWorkers"

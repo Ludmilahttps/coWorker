@@ -1,17 +1,20 @@
-{% load static %}
 {% load i18n %}
+{% load static %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ selected_language }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% trans "Header Example" %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <header>
-        <div>
-            <img src="{% static 'homepage/logo.png' %}" alt="{% trans 'Logo' %}">
-            <span>CoWorkers</span>
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="{% static 'homepage/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
+            <span class="site-name">CoWorkers</span>
         </div>
         <nav>
             <ul>
@@ -21,22 +24,132 @@
                 <li><a href="#">{% trans "More" %}</a></li>
             </ul>
         </nav>
-        <div class="language-selector">
-            <form action="{% url 'set_language' %}" method="post">
-                {% csrf_token %}
-                <select name="language">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% for lang in LANGUAGES %}
-                        <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
-                            {{ lang.1 }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <input type="submit" value="Change">
-            </form>                        
+        <div class="user-controls">
+            <a href="?toggle_dropdown=true" class="country" id="country">{{ selected_language_name }}</a>
+            {% if dropdown_visible %}
+            <div class="country-dropdown" id="country-dropdown">
+                {% for language in languages %}
+                <a href="?language={{ language.code }}">{{ language.name_local }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <nav>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}">Perfil</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Sign In</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     </header>
-    {% block content %}{% endblock %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #F0F4F8;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            color: #203354;
+            padding: 10px 20px;
+            border-bottom: 1px solid #B0BEC5;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar nav ul li {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .navbar nav ul li a {
+            color: #203354;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .navbar nav ul li a:hover {
+            color: #4A90E2;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .country {
+            color: #203354;
+            cursor: pointer;
+        }
+
+        .country:hover {
+            color: #4A90E2;
+        }
+
+        .sign-in {
+            background-color: #203354;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .sign-in:hover {
+            background-color: #4A90E2;
+            color: white;
+        }
+
+        .country-dropdown {
+            display: block;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            top: 100%;
+            right: 0;
+            width: 200px;
+        }
+
+        .country-dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .country-dropdown a:hover {
+            background-color: #ddd;
+        }
+    </style>
 </body>
+
 </html>

@@ -1,4 +1,5 @@
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,6 +15,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -32,7 +34,7 @@ ROOT_URLCONF = 'setup.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'homepage', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,15 +88,15 @@ LOGGING = {
     },
 }
 
-LANGUAGE_CODE = 'en'
 
+LANGUAGE_CODE = 'en'
 LANGUAGES = [
-    ('en', 'English'),
-    ('pt', 'Português'),
-    ('es', 'Español'),
-    ('fr', 'Français'),
-    ('de', 'Deutsch'),
-    ('it', 'Italiano'),
+    ('en', _('English')),
+    ('pt', _('Portuguese')),
+    ('es', _('Spanish')),
+    ('fr', _('French')),
+    ('de', _('German')),
+    ('it', _('Italian')),
 ]
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
@@ -108,3 +110,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'home'
