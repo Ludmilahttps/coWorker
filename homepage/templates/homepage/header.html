@@ -1,6 +1,7 @@
-{% load static i18n %}
+{% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,8 +21,22 @@
                 <li><a href="#">{% trans "More" %}</a></li>
             </ul>
         </nav>
+        <div class="language-selector">
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <select name="language">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% for lang in LANGUAGES %}
+                        <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                            {{ lang.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Change">
+            </form>                        
+        </div>
     </header>
-
     {% block content %}{% endblock %}
 </body>
 </html>
