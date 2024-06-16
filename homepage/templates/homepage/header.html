@@ -17,13 +17,15 @@
             <span class="site-name">CoWorkers</span>
         </div>
         <nav>
-            <ul>
-                <li><a href="#">{% trans "Discover" %}</a></li>
-                <li><a href="#">{% trans "Trips" %}</a></li>
-                <li><a href="#">{% trans "Review" %}</a></li>
-                <li><a href="#">{% trans "More" %}</a></li>
+            <ul> 
+                <li><a href="{% url 'discover' %}">{% trans "Discover" %}</a></li> 
+                <li><a href="{% url 'events' %}">{% trans "Events" %}</a></li> 
+                <li><a href="{% url 'trips' %}">{% trans "Trips" %}</a></li> 
+                <li><a href="{% url 'review' %}">{% trans "Review" %}</a></li> 
+                <li><a href="{% url 'about' %}">{% trans "About" %}</a></li> 
+                <li><a href="{% url 'more' %}">{% trans "More" %}</a></li> 
             </ul>
-        </nav>
+        </nav>        
         <div class="user-controls">
             <a href="?toggle_dropdown=true" class="country" id="country">{{ selected_language_name }}</a>
             {% if dropdown_visible %}

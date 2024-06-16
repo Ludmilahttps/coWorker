@@ -11,9 +11,9 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    path('', home, name='home'),
+    path('', include('homepage.urls')),
     path('accounts/', include('accounts.urls')),
-    # path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.urls')),
 )
 
 if settings.DEBUG:

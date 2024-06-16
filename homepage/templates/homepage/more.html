@@ -1,0 +1,12 @@
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% block title %}{% trans "More" %}{% endblock %}
+
+{% block content %}
+<section style="padding: 20px;">
+    <h1>{% trans "More Page" %}</h1>
+    <p>{% trans "Content for the More page goes here." %}</p>
+</section>
+
+{% include 'homepage/footer.html' %}
+{% endblock %}
