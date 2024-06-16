@@ -8,11 +8,12 @@ from homepage.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
-] 
+]
 
 urlpatterns += i18n_patterns(
     path('', home, name='home'),
     path('accounts/', include('accounts.urls')),
+    # path('accounts/', include('allauth.urls')),
 )
 
 if settings.DEBUG:

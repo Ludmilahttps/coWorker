@@ -1,57 +1,62 @@
+{% load i18n socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Login{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>{% block title %}{% trans "Sign In" %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container {% if show_signup %}right-panel-active{% endif %}" id="container">
         <div class="form-container sign-up-container {% if show_signup %}active{% endif %}">
-            <form action="#" method="POST">
-                <h1>Sign up</h1>
+            <form action="{% url 'account_signup' %}" method="POST">
+                {% csrf_token %}
+                <h1>{% trans "Sign up" %}</h1>
                 <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    {% if 'google' in socialaccount.providers %}
+                        <a href="{% provider_login_url 'google' %}" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    {% else %}
+                        <p>{% trans "Google login not configured" %}</p>
+                    {% endif %}
                 </div>
-                <span>or use your email for registration</span>
-                <input type="text" placeholder="Name" name="name" />
-                <input type="email" placeholder="Email" name="email" />
-                <input type="password" placeholder="Password" name="password" />
-				<input type="password" placeholder="Confirm password" name="password" />
-                <button>Sign Up</button>
+                <span>{% trans "or use your email for registration" %}</span>
+                <input type="text" placeholder="{% trans 'Name' %}" name="name" />
+                <input type="email" placeholder="{% trans 'Email' %}" name="email" />
+                <input type="password" placeholder="{% trans 'Password' %}" name="password" />
+                <input type="password" placeholder="{% trans 'Confirm password' %}" name="confirm_password" />
+                <button type="submit">{% trans "Sign Up" %}</button>
             </form>
         </div>
         <div class="form-container sign-in-container {% if not show_signup %}active{% endif %}">
-            <form action="#" method="POST">
-                <h1>Sign in</h1>
+            <form action="{% url 'account_login' %}" method="POST">
+                {% csrf_token %}
+                <h1>{% trans "Sign In" %}</h1>
                 <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    {% if 'google' in socialaccount.providers %}
+                        <a href="{% provider_login_url 'google' %}" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    {% else %}
+                        <p>{% trans "Google login not configured" %}</p>
+                    {% endif %}
                 </div>
-                <span>or use your account</span>
-                <input type="email" placeholder="Email" name="email" />
-                <input type="password" placeholder="Password" name="password" />
-                <a href="#">Forgot your password?</a>
-                <button>Sign In</button>
+                <span>{% trans "or use your email for login" %}</span>
+                <input type="email" placeholder="{% trans 'Email' %}" name="email" />
+                <input type="password" placeholder="{% trans 'Password' %}" name="password" />
+                <a href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
+                <button type="submit">{% trans "Sign In" %}</button>
             </form>
         </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
+                    <h1>{% trans "Welcome Back!" %}</h1>
+                    <p>{% trans "To keep connected with us please login with your personal info" %}</p>
+                    <button class="ghost" id="signIn">{% trans "Sign In" %}</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+                    <h1>{% trans "Hello, Friend!" %}</h1>
+                    <p>{% trans "Enter your personal details and start journey with us" %}</p>
+                    <button class="ghost" id="signUp">{% trans "Sign Up" %}</button>
                 </div>
             </div>
         </div>
@@ -64,12 +69,12 @@
 
             signUpButton.addEventListener('click', () => {
                 container.classList.add('right-panel-active');
-                window.history.pushState({}, '', '{% url "signup" %}');
+                window.history.pushState({}, '', '{% url "account_signup" %}');
             });
 
             signInButton.addEventListener('click', () => {
                 container.classList.remove('right-panel-active');
-                window.history.pushState({}, '', '{% url "signin" %}');
+                window.history.pushState({}, '', '{% url "account_login" %}');
             });
         });
     </script>

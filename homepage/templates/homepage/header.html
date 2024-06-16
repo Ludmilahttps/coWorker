@@ -37,9 +37,14 @@
                 <ul>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'profile' %}">Perfil</a></li>
-                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer; color: inherit;">Logout</button>
+                            </form>
+                        </li>
                     {% else %}
-                        <li><a href="{% url 'signin' %}">Sign In</a></li>
+                    <li><a href="{% url 'signin' %}">Sign In</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -48,6 +53,10 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+</body>
+</html>
+
+
     <style>
         body,
         html {

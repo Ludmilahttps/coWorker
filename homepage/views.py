@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import AnonymousUser
+
 
 def home(request):
     if 'language' in request.GET:
@@ -25,3 +27,14 @@ def home(request):
         'dropdown_visible': dropdown_visible
     }
     return render(request, 'homepage/home.html', context)
+
+def home_view(request):
+    context = {
+        # Outros contextos que você precisa passar para o template
+    }
+
+    if not request.user.is_authenticated:
+        request.user = AnonymousUser()
+
+    context['user'] = request.user
+    return render(request, 'home.html', context)
