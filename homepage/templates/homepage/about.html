@@ -1,12 +1,167 @@
 {% extends 'homepage/header.html' %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% trans "About" %}{% endblock %}
 
 {% block content %}
-<section style="padding: 20px;">
-    <h1>{% trans "About Page" %}</h1>
-    <p>{% trans "Content for the About page goes here." %}</p>
+<section class="about-section">
+    <div class="container">
+        <h1>{% trans "About CoWorkers" %}</h1>
+        <div class="about-grid">
+            <div class="about-card">
+                <img src="{% static 'images/about-creator.jpg' %}" alt="{% trans "About the Creator" %}"> 
+                <h2>{% trans "About the Creator" %}</h2>
+                <p>{% trans "This project is developed by Ludmila Silveira, a Computer Engineering student at UFSC (Federal University of Santa Catarina)." %}</p>
+                <p>{% trans "Ludmila is passionate about technology and aims to create impactful projects that solve real-world problems. With a keen interest in software development, she has dedicated her academic journey to mastering the skills necessary to build innovative solutions." %}</p>
+            </div>
+            <div class="about-card">
+                <img src="{% static 'images/about-project.jpg' %}" alt="{% trans "About the Project" %}">
+                <h2>{% trans "About the Project" %}</h2>
+                <p>{% trans "CoWorkers is designed to connect remote and hybrid professionals with workspaces around the world. The goal is to provide flexible and efficient work environments that cater to the needs of modern professionals." %}</p>
+                <p>{% trans "The platform offers features like personalized search, detailed information about each location, an evaluation and online reservation system, and networking and collaboration tools." %}</p>
+            </div>
+            <div class="about-card">
+                <img src="{% static 'images/about-technology.jpg' %}" alt="{% trans "Technology" %}"> 
+                <h2>{% trans "Technology" %}</h2>
+                <p>{% trans "The development of CoWorkers followed an iterative and incremental process using agile methodology and tools like Python, Django, and PostgreSQL. The platform is designed to be intuitive, scalable, and secure, offering a complete experience for professionals seeking flexible and productive workspaces." %}</p>
+                <p>{% trans "Some innovative features include an intelligent recommendation system, advanced search filters, and an interactive map to facilitate location visualization." %}</p>
+            </div>
+        </div>
+
+        <div class="additional-info">
+            <h2>{% trans "Additional Information" %}</h2>
+            <ul>
+                <li>{% trans "Project Name: CoWorkers" %}</li>
+                <li>{% trans "Developer: Ludmila Silveira" %}</li>
+                <li>{% trans "Institution: UFSC (Federal University of Santa Catarina)" %}</li>
+                <li>{% trans "Purpose: Connecting professionals with workspaces" %}</li>
+                <li>{% trans "Technologies Used: Python, Django, PostgreSQL, React" %}</li>
+            </ul>
+        </div>              
+    </div>
 </section>
 
+<style>
+   /* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;     /* Body text font */
+    background-color: #f5f5f5;             /* Off-white background (subtle texture) */
+    line-height: 1.6;                     /* Improved readability */
+    color: #707986;                       /* Dark gray for body text */
+}
+
+/* Typography */
+h1 {
+    font-family: 'Montserrat', sans-serif; /* Main heading font */
+    font-weight: 700;
+    color: #203354;                       /* Primary dark blue */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-family: 'Montserrat', sans-serif; /* Section heading font */
+    font-weight: 600;                    /* Slightly less bold than h1 */
+    color: #203354;                       /* Primary dark blue */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p, li {
+    font-family: 'Lato', sans-serif;     /* Body text font */
+    line-height: 1.6;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px; 
+    margin: 0 auto;    
+    padding: 0 20px;  
+}
+
+.about-section {
+    padding: 80px 0;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+}
+
+/* Cards */
+.about-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover effects */
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.about-card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* Additional Information */
+.additional-info {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 60px;
+    text-align: center;
+}
+.additional-info h2 {
+    color: #203354; /* Primary dark blue */
+    margin-bottom: 20px;
+}
+
+.additional-info ul {
+    list-style: none;
+    padding: 0;
+    display: inline-block; /* To allow for centering */
+}
+
+.additional-info li {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+
+/* Links */
+a {
+    color: #365d77; /* Darker blue for links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries (for responsiveness) */
+@media (max-width: 768px) {
+    .about-section {
+        padding: 40px 0;
+    }
+    .about-grid {
+        gap: 20px;
+    }
+}
+
+</style>
 {% include 'homepage/footer.html' %}
 {% endblock %}

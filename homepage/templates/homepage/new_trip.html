@@ -1,0 +1,60 @@
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% block title %}{% trans "New Trip" %}{% endblock %}
+
+{% block content %}
+<section class="new-trip-section">
+    <div class="container">
+        <h1>{% trans "Create New Trip" %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit">{% trans "Create" %}</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    .new-trip-section {
+        background-color: #f5f5f5;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .new-trip-section h1 {
+        font-family: 'Montserrat', sans-serif;
+        color: #7cab9b;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .new-trip-section form {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .new-trip-section form .btn-submit {
+        background-color: #203354;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: 'Montserrat', sans-serif;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .new-trip-section form .btn-submit:hover {
+        background-color: #365d77;
+    }
+</style>
+
+{% include 'homepage/footer.html' %}
+{% endblock %}
