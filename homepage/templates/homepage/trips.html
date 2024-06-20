@@ -15,7 +15,7 @@
             <h2>{% trans "Future Trips" %}</h2>
             <div class="trips-grid" id="future-trips-grid">
                 {% for trip in future_trips %}
-                    <div class="trip-card">
+                    <div class="trip-card"></div>;
                         <div class="trip-image">
                             <img src="{{ trip.image.url }}" alt="{{ trip.title }}">
                         </div>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 {% empty %}
-                    <div class="trip-card no-trips" onclick="window.location.href='{% url 'new_trip' %}';">
+                    <div class="trip-card no-trips" onclick="window.location.href='{% url 'new_trip' %}'">
                         <div class="trip-details">
                             <h3>{% trans "No upcoming trips yet!" %}</h3>
                             <p class="trip-description">{% trans "Click here to create your first trip." %}</p>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 {% empty %}
-                    <div class="trip-card no-trips" onclick="window.location.href='{% url 'new_trip' %}';">
+                    <div class="trip-card no-trips" onclick="window.location.href='{% url 'new_trip' %}'">
                         <div class="trip-details">
                             <h3>{% trans "No past trips yet!" %}</h3>
                             <p class="trip-description">{% trans "Click here to create your first trip." %}</p>

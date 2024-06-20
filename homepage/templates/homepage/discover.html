@@ -1,12 +1,98 @@
 {% extends 'homepage/header.html' %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% trans "Discover" %}{% endblock %}
 
 {% block content %}
 <section style="padding: 20px;">
-    <h1>{% trans "Discover Page" %}</h1>
-    <p>{% trans "Content for the Discover page goes here." %}</p>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <input type="text" placeholder="{% trans "Search..." %}" style="padding: 10px; width: 80%;"/>
+        <button style="padding: 10px; margin-left: 10px;">{% trans "Add New Space" %}</button>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h2>{% trans "Categories" %}</h2>
+        <div class="carousel" style="display: flex; overflow-x: auto;">
+            {% for category in categories %}
+            <div style="min-width: 150px; margin-right: 10px; text-align: center;">
+                <p>{{ category.name }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h2>{% trans "Workspaces" %}</h2>
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for workspace in workspaces %}
+            <div class="workspace-card" style="width: 300px; margin: 10px; border: 1px solid #ccc; padding: 10px;">
+                {% if workspace.photos.all %}
+                <img src="{{ workspace.photos.first.file.url }}" alt="{{ workspace.name }}" style="width: 100%;"/>
+                {% endif %}
+                <h3>{{ workspace.name }}</h3>
+                <p>{{ workspace.category.name }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </section>
+
+<style>
+    .search-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .search-input {
+        padding: 10px;
+        width: 80%;
+    }
+
+    .add-space-button {
+        padding: 10px;
+        margin-left: 10px;
+    }
+
+    .categories-section {
+        margin-top: 20px;
+    }
+
+    .carousel {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .carousel-item {
+        min-width: 150px;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+    .carousel-image {
+        width: 100%;
+    }
+
+    .workspaces-section {
+        margin-top: 20px;
+    }
+
+    .workspaces-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .workspace-card {
+        width: 300px;
+        margin: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .workspace-image {
+        width: 100%;
+    }
+</style>
 
 {% include 'homepage/footer.html' %}
 {% endblock %}

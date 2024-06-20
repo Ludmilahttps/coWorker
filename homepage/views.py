@@ -3,7 +3,7 @@ from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
-from .models import Trip
+from .models import Trip, Category, Workspace
 from .forms import TripForm
 from django.utils.translation import gettext as _
 
@@ -40,10 +40,6 @@ def get_context_data(request):
 def home(request):
     context = get_context_data(request)
     return render(request, 'homepage/home.html', context)
-
-def discover(request):
-    context = get_context_data(request)
-    return render(request, 'homepage/discover.html', context)
 
 def events(request):
     context = get_context_data(request)
@@ -100,3 +96,16 @@ def new_trip(request):
         form = TripForm()
 
     return render(request, 'homepage/new_trip.html', {'form': form})
+
+# Discover screen
+def discover(request):
+    categories = Category.objects.all()
+    workspaces = Workspace.objects.all()
+    context = {
+        'categories': categories,
+        'workspaces': workspaces,
+        'selected_language': request.LANGUAGE_CODE,
+        'selected_language_name': request.LANGUAGE_CODE,
+        'dropdown_visible': False,
+    }
+    return render(request, 'homepage/discover.html', context)
