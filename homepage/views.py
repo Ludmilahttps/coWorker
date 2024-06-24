@@ -12,7 +12,7 @@ def get_context_data(request):
         new_language = request.GET['language']
         activate(new_language)
         request.session['django_language'] = new_language
-        return redirect(request.path)  # redirecionar para a mesma página
+        return redirect(request.path) 
 
     current_language = request.session.get('django_language', get_language())
     activate(current_language)
@@ -30,10 +30,18 @@ def get_context_data(request):
         'dropdown_visible': dropdown_visible
     }
 
-    if not request.user.is_authenticated:
-        request.user = AnonymousUser()
-
-    context['user'] = request.user
+    if 'user_id' in request.session:
+        context['user'] = {
+            'id': request.session.get('user_id'),
+            'name': request.session.get('user_name'),
+            'email': request.session.get('user_email'),
+            'type': request.session.get('user_type')
+        }
+    else:
+        context['user'] = {
+            'name': 'Guest',
+            'email': 'guest@example.com'
+        }
 
     return context
 
@@ -99,11 +107,11 @@ def new_trip(request):
 
 # Discover screen
 def discover(request):
-    categories = Category.objects.all()
-    workspaces = Workspace.objects.all()
+    Categories = Category.objects.all()
+    Workspaces = Workspace.objects.all()
     context = {
-        'categories': categories,
-        'workspaces': workspaces,
+        'categories': Categories,
+        'workspaces': Workspaces,
         'selected_language': request.LANGUAGE_CODE,
         'selected_language_name': request.LANGUAGE_CODE,
         'dropdown_visible': False,

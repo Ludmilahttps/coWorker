@@ -15,12 +15,12 @@
             <h2>{% trans "Future Trips" %}</h2>
             <div class="trips-grid" id="future-trips-grid">
                 {% for trip in future_trips %}
-                    <div class="trip-card"></div>;
+                    <div class="trip-card">
                         <div class="trip-image">
-                            <img src="{{ trip.image.url }}" alt="{{ trip.title }}">
+                            <img src="{{ trip.image.url }}" alt="{{ trip.name }}">
                         </div>
                         <div class="trip-details">
-                            <h3>{{ trip.title }}</h3>
+                            <h3>{{ trip.name }}</h3>
                             <p class="trip-description">{% trans "Start Date:" %} {{ trip.start_date }}</p>
                             <p class="trip-description">{% trans "End Date:" %} {{ trip.end_date }}</p>
                             <div class="trip-bottom-details">
@@ -48,10 +48,10 @@
                 {% for trip in past_trips %}
                     <div class="trip-card">
                         <div class="trip-image">
-                            <img src="{{ trip.image.url }}" alt="{{ trip.title }}">
+                            <img src="{{ trip.image.url }}" alt="{{ trip.name }}">
                         </div>
                         <div class="trip-details">
-                            <h3>{{ trip.title }}</h3>
+                            <h3>{{ trip.name }}</h3>
                             <p class="trip-description">{% trans "Start Date:" %} {{ trip.start_date }}</p>
                             <p class="trip-description">{% trans "End Date:" %} {{ trip.end_date }}</p>
                         </div>

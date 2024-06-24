@@ -1,49 +1,55 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginForm
+from .models import Users
+from homepage.views import get_context_data
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.hashers import make_password, check_password
+from django.utils.translation import activate, get_language, get_language_info
 
-def signin_view(request):
-    form = AuthenticationForm(request, data=request.POST or None)
+
+def login_view(request):
     if request.method == 'POST':
+        form = LoginForm(request.POST)
         if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('/')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            try:
+                user = Users.objects.get(email=email)
+                if user.check_password(password):
+                    request.session['user_id'] = user.id
+                    request.session['user_name'] = user.name
+                    request.session['user_email'] = user.email
+                    request.session['user_type'] = user.type_id
+
+                    context = get_context_data(request)
+                    return render(request, 'homepage/home.html', context)
+                else:
+                    form.add_error('password', 'Password is incorrect')
+            except Users.DoesNotExist:
+                form.add_error('email', 'Email not found')
     else:
-        form = AuthenticationForm()
-    
-    context = {
-        'form': form,
-        'show_signin': True,
-        'show_signup': False,
-        'user': request.user if request.user.is_authenticated else AnonymousUser()
-    }
-    return render(request, 'accounts/sign.html', context)
+        form = LoginForm()
+    return render(request, 'accounts/sign.html', {'form': form})
 
 def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
-            return redirect('home')
+            user = form.save(commit=False)
+            user.password = make_password(form.cleaned_data['password'])
+            user.save()
+            return redirect('signin')
     else:
         form = SignUpForm()
-    context = {
-        'show_signup': True,
-        'show_signin': False,
-        'form': form
-    }
-    return render(request, 'accounts/sign.html', context)
+    return render(request, 'accounts/sign.html', {'form': form, 'show_signup': True})
 
 @login_required
-def profile(request):
-    return render(request, 'accounts/profile.html')
+def profile_view(request):
+    context = get_context_data(request)
+    return render(request, 'accounts/profile.html', context)
 
 def home_view(request):
     context = {

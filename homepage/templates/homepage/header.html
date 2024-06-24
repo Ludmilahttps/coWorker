@@ -37,8 +37,8 @@
             {% endif %}
             <nav>
                 <ul>
-                    {% if user.is_authenticated %}
-                        <li><a href="{% url 'profile' %}">Perfil</a></li>
+                    {% if user.id %}
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
                         <li>
                             <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                                 {% csrf_token %}
@@ -46,7 +46,7 @@
                             </form>
                         </li>
                     {% else %}
-                    <li><a href="{% url 'signin' %}">Sign In</a></li>
+                        <li><a href="{% url 'signin' %}">Sign In</a></li>
                     {% endif %}
                 </ul>
             </nav>

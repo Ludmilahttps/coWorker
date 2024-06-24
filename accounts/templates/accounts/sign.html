@@ -1,4 +1,4 @@
-{% load i18n socialaccount %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,38 +10,38 @@
 <body>
     <div class="container {% if show_signup %}right-panel-active{% endif %}" id="container">
         <div class="form-container sign-up-container {% if show_signup %}active{% endif %}">
-            <form action="{% url 'account_signup' %}" method="POST">
+            <form action="{% url 'signup' %}" method="POST">
                 {% csrf_token %}
                 <h1>{% trans "Sign up" %}</h1>
                 <div class="social-container">
-                    {% if 'google' in socialaccount.providers %}
-                        <a href="{% provider_login_url 'google' %}" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    {% else %}
-                        <p>{% trans "Google login not configured" %}</p>
-                    {% endif %}
+                    <!-- Social Login Links -->
                 </div>
                 <span>{% trans "or use your email for registration" %}</span>
-                <input type="text" placeholder="{% trans 'Name' %}" name="name" />
-                <input type="email" placeholder="{% trans 'Email' %}" name="email" />
-                <input type="password" placeholder="{% trans 'Password' %}" name="password" />
-                <input type="password" placeholder="{% trans 'Confirm password' %}" name="confirm_password" />
+                {{ form.non_field_errors }}
+                {{ form.name.errors }}
+                <input type="text" placeholder="{% trans 'Name' %}" name="name" value="{{ form.name.value }}">
+                {{ form.email.errors }}
+                <input type="email" placeholder="{% trans 'Email' %}" name="email" value="{{ form.email.value }}">
+                {{ form.password.errors }}
+                <input type="password" placeholder="{% trans 'Password' %}" name="password" value="{{ form.password.value }}">
+                {{ form.confirm_password.errors }}
+                <input type="password" placeholder="{% trans 'Confirm password' %}" name="confirm_password" value="{{ form.confirm_password.value }}">
                 <button type="submit">{% trans "Sign Up" %}</button>
             </form>
         </div>
         <div class="form-container sign-in-container {% if not show_signup %}active{% endif %}">
-            <form action="{% url 'account_login' %}" method="POST">
+            <form action="{% url 'signin' %}" method="POST">
                 {% csrf_token %}
                 <h1>{% trans "Sign In" %}</h1>
                 <div class="social-container">
-                    {% if 'google' in socialaccount.providers %}
-                        <a href="{% provider_login_url 'google' %}" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    {% else %}
-                        <p>{% trans "Google login not configured" %}</p>
-                    {% endif %}
+                    <!-- Social Login Links -->
                 </div>
                 <span>{% trans "or use your email for login" %}</span>
-                <input type="email" placeholder="{% trans 'Email' %}" name="email" />
-                <input type="password" placeholder="{% trans 'Password' %}" name="password" />
+                {{ form.non_field_errors }}
+                {{ form.email.errors }}
+                <input type="email" placeholder="{% trans 'Email' %}" name="email" value="{{ form.email.value }}">
+                {{ form.password.errors }}
+                <input type="password" placeholder="{% trans 'Password' %}" name="password" value="{{ form.password.value }}">
                 <a href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
                 <button type="submit">{% trans "Sign In" %}</button>
             </form>
@@ -69,18 +69,17 @@
 
             signUpButton.addEventListener('click', () => {
                 container.classList.add('right-panel-active');
-                window.history.pushState({}, '', '{% url "account_signup" %}');
+                window.history.pushState({}, '', '{% url "signup" %}');
             });
 
             signInButton.addEventListener('click', () => {
                 container.classList.remove('right-panel-active');
-                window.history.pushState({}, '', '{% url "account_login" %}');
+                window.history.pushState({}, '', '{% url "signin" %}');
             });
         });
     </script>
 </body>
 </html>
-
 
 <style>
 	* {

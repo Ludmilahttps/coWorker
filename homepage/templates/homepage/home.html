@@ -4,9 +4,11 @@
 
 {% block content %}
 <section style="padding: 20px;">
-    <h1>{% trans "Welcome to the Home Page" %}</h1>
-    <p>{% trans "Country:" %} {{ country }}</p>
-    <p>{% trans "Language:" %} {{ selected_language_name }}</p>
+    <body>
+        <h1>Welcome, {{ user.name }}</h1>
+        <p>Your email: {{ user.email }}</p>
+        <p>Preferred language: {{ selected_language_name }}</p>
+    </body>
 </section>
 
 {% include 'homepage/footer.html' %}

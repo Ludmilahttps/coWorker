@@ -1,8 +1,16 @@
-{% extends "accounts/base.html" %}
-
-{% block title %}Perfil{% endblock %}
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% block title %}{% trans "Profile" %}{% endblock %}
 
 {% block content %}
-<h1>Perfil de {{ user.username }}</h1>
-<p>Email: {{ user.email }}</p>
+<section style="padding: 20px;">
+    <h1>{% trans "Profile Page" %}</h1>
+    <p>{% trans "Content for the Events page goes here." %}</p>
+</section>
+
+<style>
+
+</style>
+
+{% include 'homepage/footer.html' %}
 {% endblock %}
