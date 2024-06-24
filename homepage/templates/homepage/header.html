@@ -24,6 +24,7 @@
                 <li><a href="{% url 'trips' %}">{% trans "Trips" %}</a></li> 
                 <li><a href="{% url 'more' %}">{% trans "Blog" %}</a></li> 
                 <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+                <li><a href="{% url 'profile' %}">{% trans "Profile" %}</a></li>
             </ul>
         </nav>        
         <div class="user-controls">
@@ -38,7 +39,6 @@
             <nav>
                 <ul>
                     {% if user.id %}
-                        <li><a href="{% url 'profile' %}">Profile</a></li>
                         <li>
                             <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                                 {% csrf_token %}

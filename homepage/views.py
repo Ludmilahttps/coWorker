@@ -3,9 +3,10 @@ from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
-from .models import Trip, Category, Workspace
-from .forms import TripForm
+from .models import Trip, Category, Workspace, WorkspacePhoto
+from .forms import TripForm, WorkspaceForm
 from django.utils.translation import gettext as _
+from django.contrib.auth.decorators import login_required
 
 def get_context_data(request):
     if 'language' in request.GET:
@@ -106,14 +107,27 @@ def new_trip(request):
     return render(request, 'homepage/new_trip.html', {'form': form})
 
 # Discover screen
-def discover(request):
-    Categories = Category.objects.all()
-    Workspaces = Workspace.objects.all()
-    context = {
-        'categories': Categories,
-        'workspaces': Workspaces,
-        'selected_language': request.LANGUAGE_CODE,
-        'selected_language_name': request.LANGUAGE_CODE,
-        'dropdown_visible': False,
-    }
-    return render(request, 'homepage/discover.html', context)
+def discover_view(request):
+    categories = Category.objects.all()
+    workspaces = Workspace.objects.all()
+    for workspace in workspaces:
+        workspace.photos = WorkspacePhoto.objects.filter(workspace=workspace)
+    return render(request, 'homepage/discover.html', {
+        'categories': categories,
+        'workspaces': workspaces
+    })
+
+def add_workspace_view(request):
+    if request.method == 'POST':
+        form = WorkspaceForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('discover')
+    else:
+        form = WorkspaceForm()
+    return render(request, 'homepage/add_workspace.html', {'form': form})
+
+@login_required
+def profile_view(request):
+    context = get_context_data(request)
+    return render(request, 'homepage/profile.html', context)

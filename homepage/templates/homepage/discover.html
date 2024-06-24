@@ -11,7 +11,9 @@
             <input type="text" class="search-input" placeholder="{% trans 'Search...' %}">
             <i class="fas fa-search search-icon"></i>
         </div>
-        <button class="sign-in add-space-button">{% trans "Add New Space" %}</button>
+        <button class="sign-in add-space-button" onclick="location.href='{% url 'add_workspace' %}'">
+            {% trans "Add New Space" %}
+        </button>
     </div>
 
     <div class="categories-section">
@@ -31,7 +33,7 @@
             {% for workspace in workspaces %}
             <div class="workspace-card">
                 {% if workspace.photos.exists %}
-                <img src="{{ workspace.photos.first.file.url }}" alt="{{ workspace.name }}" class="workspace-image" />
+                <img src="{{ workspace.photos.first.file }}" alt="{{ workspace.name }}" class="workspace-image" />
                 {% endif %}
                 <h3>{{ workspace.name }}</h3>
                 <p>{{ workspace.category.name }}</p>

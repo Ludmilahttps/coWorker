@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% trans "Add New Workspace" %}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="sign-in add-space-button">{% trans "Add Workspace" %}</button>
+</form>
+{% endblock %}

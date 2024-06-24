@@ -1,0 +1,15 @@
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% block title %}{% trans "Profileeeeeeee" %}{% endblock %}
+
+{% block content %}
+<section style="padding: 20px;">
+    <body>
+        <h1>Welcome, {{ user.name }}</h1>
+        <p>Your email: {{ user.email }}</p>
+        <p>Preferred language: {{ selected_language_name }}</p>
+    </body>
+</section>
+
+{% include 'homepage/footer.html' %}
+{% endblock %}

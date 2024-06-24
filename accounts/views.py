@@ -4,7 +4,6 @@ from .forms import SignUpForm, LoginForm
 from .models import Users
 from homepage.views import get_context_data
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.translation import activate, get_language, get_language_info
@@ -46,10 +45,6 @@ def signup_view(request):
         form = SignUpForm()
     return render(request, 'accounts/sign.html', {'form': form, 'show_signup': True})
 
-@login_required
-def profile_view(request):
-    context = get_context_data(request)
-    return render(request, 'accounts/profile.html', context)
 
 def home_view(request):
     context = {

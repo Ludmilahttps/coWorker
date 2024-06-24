@@ -6,10 +6,10 @@ class Type(models.Model):
 
 class Users(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
-    type = models.ForeignKey('Type', on_delete=models.CASCADE)
-    registration_date = models.DateTimeField(default=timezone.now)
+    type = models.ForeignKey(Type, on_delete=models.CASCADE)
+    registration_date = models.DateTimeField(auto_now_add=True)
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -24,24 +24,17 @@ class Workspace(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True)
     number = models.CharField(max_length=10, blank=True, null=True)
     complement = models.CharField(max_length=100, blank=True, null=True)
-    postal_code = models.CharField(max_length=20, blank=True, null=True)
-    working_hours = models.CharField(max_length=100, blank=True, null=True)
-    average_rating = models.FloatField(blank=True, null=True)
-    owner = models.ForeignKey(Users, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    postalCode = models.CharField(max_length=20, blank=True, null=True)  # Ajuste o nome da coluna
+    workingHours = models.CharField(max_length=100, blank=True, null=True)  # Ajuste o nome da coluna
+    averageRating = models.FloatField(blank=True, null=True)  # Ajuste o nome da coluna
+    owner = models.ForeignKey('Users', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
 class WorkspacePhoto(models.Model):
-    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, related_name='photos')
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     file = models.CharField(max_length=255)
-    date_added = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return f'Photo for {self.workspace.name} by {self.user.name}'
-
-class Photo(models.Model):
-    file = models.CharField(max_length=255)
-    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
 
 class Notes(models.Model):
     note_sockets = models.IntegerField()
@@ -93,7 +86,7 @@ class Trip(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='user_id')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    country = models.CharField(max_length=100)
-    neighborhood = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, default='Unknown')
+    neighborhood = models.CharField(max_length=100, default='Unknown')
+    city = models.CharField(max_length=100, default='Unknown')
+    name = models.CharField(max_length=100, default='Unknown')
