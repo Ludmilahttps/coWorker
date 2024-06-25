@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.utils.translation import activate, get_language, get_language_info
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
 from .models import Trip, Category, Workspace, WorkspacePhoto
@@ -110,22 +110,32 @@ def new_trip(request):
 def discover_view(request):
     categories = Category.objects.all()
     workspaces = Workspace.objects.all()
-    for workspace in workspaces:
-        workspace.photos = WorkspacePhoto.objects.filter(workspace=workspace)
-    return render(request, 'homepage/discover.html', {
+
+    context = get_context_data(request)
+    context.update({
         'categories': categories,
-        'workspaces': workspaces
+        'workspaces': workspaces,
     })
 
-def add_workspace_view(request):
+    return render(request, 'homepage/discover.html', context)
+
+def add_workspace_view(request, id=None):
+    workspace = get_object_or_404(Workspace, id=id) if id else None
+
     if request.method == 'POST':
-        form = WorkspaceForm(request.POST, request.FILES)
+        form = WorkspaceForm(request.POST, instance=workspace)
         if form.is_valid():
             form.save()
             return redirect('discover')
     else:
-        form = WorkspaceForm()
-    return render(request, 'homepage/add_workspace.html', {'form': form})
+        form = WorkspaceForm(instance=workspace)
+
+    context = get_context_data(request)
+    context.update({
+        'form': form,
+        'workspace': workspace
+    })
+    return render(request, 'homepage/add_workspace.html', context)
 
 @login_required
 def profile_view(request):

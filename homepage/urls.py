@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('discover/', views.discover_view, name='discover'),
     path('add_workspace/', views.add_workspace_view, name='add_workspace'),
+    path('workspace/<int:id>/', views.add_workspace_view, name='workspace_detail'),
     path('events/', views.events, name='events'),
     path('trips/', views.trips, name='trips'),
     path('trips/new/', views.new_trip, name='new_trip'),

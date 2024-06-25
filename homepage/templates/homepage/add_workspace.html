@@ -1,10 +1,30 @@
-{% extends 'base.html' %}
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% block title %}{% trans "Add Workspace" %}{% endblock %}
 
 {% block content %}
-<h2>{% trans "Add New Workspace" %}</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="sign-in add-space-button">{% trans "Add Workspace" %}</button>
-</form>
+<section style="padding: 20px;">
+    {% if workspace %}
+        <h2>{{ workspace.name }}</h2>
+        <p>{{ workspace.description }}</p>
+        <p><strong>Country:</strong> {{ workspace.country }}</p>
+        <p><strong>State:</strong> {{ workspace.state }}</p>
+        <p><strong>City:</strong> {{ workspace.city }}</p>
+        <p><strong>Neighborhood:</strong> {{ workspace.neighborhood }}</p>
+        <p><strong>Street:</strong> {{ workspace.street }}, {{ workspace.number }}</p>
+        <p><strong>Complement:</strong> {{ workspace.complement }}</p>
+        <p><strong>Postal Code:</strong> {{ workspace.postalCode }}</p>
+        <p><strong>Working Hours:</strong> {{ workspace.workingHours }}</p>
+        <p><strong>Average Rating:</strong> {{ workspace.averageRating }}</p>
+    {% else %}
+        <h2>{% trans "Add New Workspace" %}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="sign-in add-space-button">{% trans "Add Workspace" %}</button>
+        </form>
+    {% endif %}
+</section>
+
+{% include 'homepage/footer.html' %}
 {% endblock %}

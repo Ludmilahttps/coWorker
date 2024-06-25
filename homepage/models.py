@@ -14,6 +14,9 @@ class Users(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
 class Workspace(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -24,15 +27,15 @@ class Workspace(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True)
     number = models.CharField(max_length=10, blank=True, null=True)
     complement = models.CharField(max_length=100, blank=True, null=True)
-    postalCode = models.CharField(max_length=20, blank=True, null=True)  # Ajuste o nome da coluna
-    workingHours = models.CharField(max_length=100, blank=True, null=True)  # Ajuste o nome da coluna
-    averageRating = models.FloatField(blank=True, null=True)  # Ajuste o nome da coluna
-    owner = models.ForeignKey('Users', on_delete=models.CASCADE)
+    postalCode = models.CharField(max_length=20, blank=True, null=True)
+    workingHours = models.CharField(max_length=100, blank=True, null=True)
+    averageRating = models.FloatField(blank=True, null=True)
+    owner = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
 class WorkspacePhoto(models.Model):
-    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    workspace = models.ForeignKey(Workspace, related_name='photos', on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     file = models.CharField(max_length=255)
     date_added = models.DateTimeField(auto_now_add=True)
 
