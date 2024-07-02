@@ -140,3 +140,29 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
+YOUR_GOOGLE_CLIENT_ID = '1077288063347-j2dsscin33kr2diofl4kghsdr3dfgqvl.apps.googleusercontent.com'
+YOUR_GOOGLE_CLIENT_SECRET = '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'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"

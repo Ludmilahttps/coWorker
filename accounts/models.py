@@ -21,11 +21,3 @@ class Users(models.Model):
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(Users, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-
-    def __str__(self):
-        return self.user.username

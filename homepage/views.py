@@ -3,7 +3,9 @@ from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
-from .models import Trip, Category, Workspace, WorkspacePhoto
+from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from .forms import TripForm, WorkspaceForm
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
@@ -28,7 +30,7 @@ def get_context_data(request):
         'selected_language': current_language,
         'selected_language_name': selected_language_name,
         'languages': languages_info,
-        'dropdown_visible': dropdown_visible
+        'dropdown_visible': dropdown_visible,
     }
 
     if 'user_id' in request.session:
@@ -48,7 +50,7 @@ def get_context_data(request):
 
 def home(request):
     context = get_context_data(request)
-    return render(request, 'homepage/home.html', context)
+    return render(request, 'homepage/discover.html', context)
 
 def events(request):
     context = get_context_data(request)
@@ -66,33 +68,18 @@ def more(request):
     context = get_context_data(request)
     return render(request, 'homepage/more.html', context)
 
+# Trip Views
 def trips(request):
-    if 'language' in request.GET:
-        new_language = request.GET['language']
-        activate(new_language)
-        request.session['django_language'] = new_language
-        return redirect('/')
-
-    current_language = request.session.get('django_language', get_language())
-    activate(current_language)
-
-    languages = settings.LANGUAGES
-    languages_info = [{'code': lang[0], 'name_local': get_language_info(lang[0])['name_local']} for lang in languages]
-    selected_language_name = get_language_info(current_language)['name_local']
-    dropdown_visible = request.GET.get('toggle_dropdown') == 'true'
-
     current_date = datetime.now().date()
     future_trips = Trip.objects.filter(start_date__gte=current_date).order_by('start_date')
     past_trips = Trip.objects.filter(start_date__lt=current_date).order_by('-start_date')
 
-    context = {
+    context = get_context_data(request)
+    context.update({
         'future_trips': future_trips,
         'past_trips': past_trips,
-        'selected_language': current_language,
-        'selected_language_name': selected_language_name,
-        'languages': languages_info,
-        'dropdown_visible': dropdown_visible
-    }
+    })
+
     return render(request, 'homepage/trips.html', context)
 
 def new_trip(request):
@@ -137,6 +124,33 @@ def add_workspace_view(request, id=None):
     })
     return render(request, 'homepage/add_workspace.html', context)
 
+@login_required
+@require_POST
+def like_workspace(request, workspace_id):
+    try:
+        workspace = Workspace.objects.get(id=workspace_id)
+        liked_workspace, created = LikedWorkspaces.objects.get_or_create(user=request.user, workspace=workspace)
+
+        if not created:
+            liked_workspace.delete()
+            is_liked = False
+        else:
+            is_liked = True
+
+        return JsonResponse({'success': True, 'isLiked': is_liked})
+    except Workspace.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Workspace not found'})
+    
+def workspace_detail_view(request, workspace_id):
+    workspace = get_object_or_404(Workspace, id=workspace_id)
+
+    context = get_context_data(request)
+    context.update({
+        'workspace': workspace
+    })
+
+    return render(request, 'homepage/workspace_detail.html', context)
+    
 @login_required
 def profile_view(request):
     context = get_context_data(request)

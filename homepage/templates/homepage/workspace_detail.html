@@ -1,0 +1,73 @@
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{{ workspace.name }}{% endblock %}
+
+{% block content %}
+<section class="workspace-detail-section">
+    <div class="workspace-info">
+        <h2>{{ workspace.name }}</h2>
+        <p>{{ workspace.description }}</p>
+        <p><strong>{% trans "Category" %}:</strong> {{ workspace.category.name }}</p>
+        <p><strong>{% trans "Location" %}:</strong> {{ workspace.city }}, {{ workspace.state }}, {{ workspace.country }}</p>
+        <p><strong>{% trans "Working Hours" %}:</strong> {{ workspace.workingHours }}</p>
+        <button class="like-button" data-workspace-id="{{ workspace.id }}">
+            {% if user.is_authenticated and workspace in user.likedworkspaces_set.all %}
+            <i><ion-icon name="heart-outline" class="fas fa-heart liked"></ion-icon></i>
+            {% else %}
+            <i><ion-icon name="heart" class="far fa-heart"></ion-icon></i>
+            {% endif %}
+        </button>
+    </div>
+
+    {% if workspace.photos.exists %}
+    <div class="workspace-photos">
+        {% for photo in workspace.photos.all %}
+        <img src="{{ photo.file }}" alt="{{ workspace.name }}" class="workspace-photo">
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const likeButton = document.querySelector('.like-button');
+
+        likeButton.addEventListener('click', function () {
+            const workspaceId = this.dataset.workspaceId;
+            const icon = this.querySelector('i');
+            const isLiked = icon.classList.contains('liked');
+           
+            if (!isAuthenticated) {
+                alert("{% trans 'Please log in to like this workspace.' %}");
+                window.location.href = "{% url 'signin' %}?next={{ request.path }}";
+                return;
+            }
+
+            fetch(`/like_workspace/${workspaceId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ isLiked: !isLiked })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    icon.classList.toggle('liked', !isLiked);
+                    icon.classList.toggle('far', isLiked);
+                    icon.classList.toggle('fas', !isLiked);
+                } else {
+                    alert("{% trans 'An error occurred. Please try again.' %}");
+                }
+            });
+        });
+    });
+</script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+{% include 'homepage/footer.html' %}
+{% endblock %}
