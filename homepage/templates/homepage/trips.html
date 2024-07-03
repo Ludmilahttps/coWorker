@@ -6,7 +6,6 @@
 {% block content %}
 <section class="trips-section">
     <div class="container">
-        <h1>{% trans "Trips" %}</h1>
         <div class="trips-actions">
             <a href="{% url 'new_trip' %}" class="btn-new-trip">{% trans "New Trip" %}</a>
         </div>
@@ -110,19 +109,20 @@
     
     /* Layout */
     .container {
+        width: 80%;
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 20px;
     }
     
     .trips-section {
-        padding: 80px 0;
+        padding: 30px 0;
     }
     
     .trips-actions {
         display: flex;
         justify-content: flex-end;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
     
     .btn-new-trip {

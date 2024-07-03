@@ -9,14 +9,19 @@
     <div class="workspace-info">
         <h2>{{ workspace.name }}</h2>
         <p>{{ workspace.description }}</p>
-        <p><strong>{% trans "Category" %}:</strong> {{ workspace.category.name }}</p>
-        <p><strong>{% trans "Location" %}:</strong> {{ workspace.city }}, {{ workspace.state }}, {{ workspace.country }}</p>
-        <p><strong>{% trans "Working Hours" %}:</strong> {{ workspace.workingHours }}</p>
+
+        <div class="workspace-details">
+            <p><strong>{% trans "Category" %}:</strong> {{ workspace.category.name }}</p>
+            <p><strong>{% trans "Location" %}:</strong> {{ workspace.city }}, {{ workspace.state }},
+                {{ workspace.country }}</p>
+            <p><strong>{% trans "Working Hours" %}:</strong> {{ workspace.workingHours }}</p>
+        </div>
+
         <button class="like-button" data-workspace-id="{{ workspace.id }}">
-            {% if user.is_authenticated and workspace in user.likedworkspaces_set.all %}
-            <i><ion-icon name="heart-outline" class="fas fa-heart liked"></ion-icon></i>
+            {% if user.is_authenticated and liked %}
+            <i><ion-icon name="heart" class="fas fa-heart liked"></ion-icon></i>
             {% else %}
-            <i><ion-icon name="heart" class="far fa-heart"></ion-icon></i>
+            <i><ion-icon name="heart-outline" class="far fa-heart"></ion-icon></i>
             {% endif %}
         </button>
     </div>
@@ -24,50 +29,130 @@
     {% if workspace.photos.exists %}
     <div class="workspace-photos">
         {% for photo in workspace.photos.all %}
-        <img src="{{ photo.file }}" alt="{{ workspace.name }}" class="workspace-photo">
+        <img src="{{ photo.file.url }}" alt="{{ workspace.name }}" class="workspace-photo">
         {% endfor %}
     </div>
     {% endif %}
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const likeButton = document.querySelector('.like-button');
+        const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-        likeButton.addEventListener('click', function () {
+        likeButton.addEventListener('click', function() {
             const workspaceId = this.dataset.workspaceId;
-            const icon = this.querySelector('i');
+            const icon = this.querySelector('ion-icon');
             const isLiked = icon.classList.contains('liked');
-           
+
             if (!isAuthenticated) {
                 alert("{% trans 'Please log in to like this workspace.' %}");
                 window.location.href = "{% url 'signin' %}?next={{ request.path }}";
                 return;
             }
 
+            console.log(`Sending like request for workspace ID: ${workspaceId}`);
+
             fetch(`/like_workspace/${workspaceId}/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-CSRFToken': csrftoken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ isLiked: !isLiked })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status !== 200 && response.status !== 201) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log(`Response data: ${JSON.stringify(data)}`);
                 if (data.success) {
                     icon.classList.toggle('liked', !isLiked);
-                    icon.classList.toggle('far', isLiked);
-                    icon.classList.toggle('fas', !isLiked);
+                    icon.name = isLiked ? 'heart-outline' : 'heart';
                 } else {
                     alert("{% trans 'An error occurred. Please try again.' %}");
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("{% trans 'An error occurred. Please try again.' %}");
             });
         });
     });
 </script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<style>
+    .workspace-detail-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .workspace-info {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center; /* Centraliza o texto */
+        margin-bottom: 20px; /* Adiciona espaçamento abaixo */
+    }
+
+    .workspace-info h2 {
+        color: #203354;
+        margin-bottom: 10px;
+    }
+
+    .workspace-details p {
+        color: #757575;
+        margin: 5px 0;
+        text-align: left; /* Alinha o texto à esquerda */
+    }
+    
+    .workspace-photos {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .workspace-photo {
+        max-width: 100%; /* Garante que as fotos não ultrapassem a largura do container */
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos do botão "Like" */
+    .like-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px; /* Aumenta o tamanho do ícone */
+    }
+
+    .like-button .liked {
+        color: #ff4d4d; /* Cor vermelha para o coração curtido */
+    }
+
+    /* Responsividade para telas menores */
+    @media (max-width: 768px) {
+        .workspace-detail-section {
+            padding: 10px;
+        }
+
+        .workspace-info {
+            padding: 15px;
+        }
+    }
+</style>
 
 {% include 'homepage/footer.html' %}
 {% endblock %}

@@ -1,15 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
-class Type(models.Model):
-    name = models.CharField(max_length=100)
-
-class Users(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=100)
-    type = models.ForeignKey(Type, on_delete=models.CASCADE)
-    registration_date = models.DateTimeField(auto_now_add=True)
+from accounts.models import Users, Type
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -18,6 +9,7 @@ class Category(models.Model):
         return self.name
 
 class Workspace(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)

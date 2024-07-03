@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
 from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces
+from accounts.models import Users
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .forms import TripForm, WorkspaceForm
@@ -30,20 +31,36 @@ def get_context_data(request):
         'selected_language': current_language,
         'selected_language_name': selected_language_name,
         'languages': languages_info,
-        'dropdown_visible': dropdown_visible,
+        'dropdown_visible': dropdown_visible
     }
 
-    if 'user_id' in request.session:
+    # if 'user_id' in request.session:
+    #     context['user'] = {
+    #         'id': request.session.get('user_id'),
+    #         'name': request.session.get('user_name'),
+    #         'email': request.session.get('user_email'),
+    #         'type': request.session.get('user_type'),
+    #         'is_authenticated': True
+    #     }
+    # else:
+    #     context['user'] = {
+    #         'name': 'Guest',
+    #         'email': 'guest@example.com',
+    #         'is_authenticated': False
+    #     }
+    if request.user.is_authenticated:
         context['user'] = {
             'id': request.session.get('user_id'),
             'name': request.session.get('user_name'),
             'email': request.session.get('user_email'),
-            'type': request.session.get('user_type')
+            'type': request.session.get('user_type'),
+            'is_authenticated': True
         }
     else:
         context['user'] = {
             'name': 'Guest',
-            'email': 'guest@example.com'
+            'email': 'guest@example.com',
+            'is_authenticated': False
         }
 
     return context
@@ -124,22 +141,38 @@ def add_workspace_view(request, id=None):
     })
     return render(request, 'homepage/add_workspace.html', context)
 
-@login_required
-@require_POST
-def like_workspace(request, workspace_id):
+def get_workspace(workspace_id):
     try:
-        workspace = Workspace.objects.get(id=workspace_id)
-        liked_workspace, created = LikedWorkspaces.objects.get_or_create(user=request.user, workspace=workspace)
+        return Workspace.objects.get(id=workspace_id)
+    except Workspace.DoesNotExist:
+        return None
+    
+@login_required
+def like_workspace(request, workspace_id):
+    print(f"Request to like workspace with ID: {workspace_id}")
+    workspace = get_workspace(workspace_id)
+    
+    if workspace is None:
+        print(f"Workspace not found: {workspace_id}")
+        return JsonResponse({'success': False, 'error': 'Workspace not found'}, status=404)
+    
+    print(f"Workspace found: {workspace.name}")
+    
+    try:
+        user = Users.objects.get(email=request.session.get('user_email'))  # Encontra a instância correta do usuário
+        liked_workspace, created = LikedWorkspaces.objects.get_or_create(user=user, workspace=workspace)
 
         if not created:
             liked_workspace.delete()
             is_liked = False
+            print(f"Workspace unliked: {workspace_id}")
         else:
             is_liked = True
+            print(f"Workspace liked: {workspace_id}")
 
-        return JsonResponse({'success': True, 'isLiked': is_liked})
-    except Workspace.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Workspace not found'})
+        return JsonResponse({'success': True, 'isLiked': is_liked}, status=200)
+    except Users.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'User not found'}, status=404)
     
 def workspace_detail_view(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
@@ -149,6 +182,14 @@ def workspace_detail_view(request, workspace_id):
         'workspace': workspace
     })
 
+    if request.user.is_authenticated:
+        user = Users.objects.get(email=request.session.get('user_email'))
+        liked = LikedWorkspaces.objects.filter(user=user.id, workspace=workspace_id).exists()
+        print(f"liked: {liked}")
+        context.update({
+            'liked': liked
+        })
+    
     return render(request, 'homepage/workspace_detail.html', context)
     
 @login_required

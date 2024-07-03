@@ -69,11 +69,13 @@
                     <h1>{% trans "Welcome Back!" %}</h1>
                     <p>{% trans "To keep connected with us please login with your personal info" %}</p>
                     <button class="ghost" id="signIn">{% trans "Sign In" %}</button>
+					<button class="ghost" onclick="window.location.href='{% url 'discover' %}';">{% trans "Back to Home" %}</button> 
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>{% trans "Hello, Friend!" %}</h1>
                     <p>{% trans "Enter your personal details and start journey with us" %}</p>
                     <button class="ghost" id="signUp">{% trans "Sign Up" %}</button>
+					<button class="ghost" onclick="window.location.href='{% url 'discover' %}';">{% trans "Back to Home" %}</button> 
                 </div>
             </div>
         </div>
@@ -171,6 +173,7 @@
 	button.ghost {
 		background-color: transparent;
 		border-color: #FFFFFF;
+		margin-top: 20px;
 	}
 
 	form {

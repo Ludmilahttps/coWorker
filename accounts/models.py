@@ -14,6 +14,9 @@ class Users(models.Model):
     class Meta:
         db_table = 'Users'
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         if not self.type_id:  # Verifica se o campo `type` não foi definido
             self.type_id = 1  # Define o valor padrão como 1
