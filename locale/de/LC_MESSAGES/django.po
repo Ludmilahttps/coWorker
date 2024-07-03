@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-01 22:56-0300\n"
+"POT-Creation-Date: 2024-07-03 20:33-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,281 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: .\accounts\templates\accounts\profile.html:5
+#: .\homepage\templates\homepage\header.html:36
+msgid "Profile"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:14
+msgid "Profile Image"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:21
+msgid "Em algum lugar do mundo"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:30
+msgid "Website"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:35
+msgid "GitHub"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:40
+msgid "Twitter"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:45
+msgid "Instagram"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:50
+msgid "Facebook"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:59
+msgid "User Information"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:86
+#: .\homepage\templates\homepage\trips.html:28
+msgid "Edit"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:90
+msgid "Workspace Statistics"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:93
+msgid "Total Workspaces Liked"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:96
+msgid "Top Cities with Liked Workspaces"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:7
+#: .\accounts\templates\accounts\sign.html:35
+#: .\accounts\templates\accounts\sign.html:63
+#: .\accounts\templates\accounts\sign.html:71
+msgid "Sign In"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:15
+msgid "Sign up"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:19
+msgid "or use your email for registration"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:22
+msgid "Name"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:24
+#: .\accounts\templates\accounts\sign.html:59
+#: .\homepage\templates\homepage\footer.html:33
+msgid "Email"
+msgstr "E-Mail"
+
+#: .\accounts\templates\accounts\sign.html:26
+#: .\accounts\templates\accounts\sign.html:61
+msgid "Password"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:28
+msgid "Confirm password"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:29
+#: .\accounts\templates\accounts\sign.html:77
+msgid "Sign Up"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:56
+msgid "or use your email for login"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:62
+msgid "Forgot your password?"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:69
+msgid "Welcome Back!"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:70
+msgid "To keep connected with us please login with your personal info"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:72
+#: .\accounts\templates\accounts\sign.html:78
+msgid "Back to Home"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:75
+msgid "Hello, Friend!"
+msgstr ""
+
+#: .\accounts\templates\accounts\sign.html:76
+msgid "Enter your personal details and start journey with us"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:4
 #: .\homepage\templates\homepage\footer.html:5
+#: .\homepage\templates\homepage\header.html:35
 msgid "About"
 msgstr "Über uns"
+
+#: .\homepage\templates\homepage\about.html:9
+msgid "About coWorkers"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:12
+#: .\homepage\templates\homepage\about.html:13
+msgid "About the Creator"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:14
+msgid ""
+"This project is developed by Ludmila Silveira, a Computer Engineering "
+"student at UFSC (Federal University of Santa Catarina)."
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:15
+msgid ""
+"Ludmila is passionate about technology and aims to create impactful projects "
+"that solve real-world problems. With a keen interest in software "
+"development, she has dedicated her academic journey to mastering the skills "
+"necessary to build innovative solutions."
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:18
+#: .\homepage\templates\homepage\about.html:19
+msgid "About the Project"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:20
+#, fuzzy
+#| msgid ""
+#| "CoWorkers connects remote and hybrid professionals with workspaces around "
+#| "the world. Our mission is to provide flexible and efficient work "
+#| "environments."
+msgid ""
+"CoWorkers is designed to connect remote and hybrid professionals with "
+"workspaces around the world. The goal is to provide flexible and efficient "
+"work environments that cater to the needs of modern professionals."
+msgstr ""
+"CoWorkers verbindet remote und hybride Fachleute mit Arbeitsräumen auf der "
+"ganzen Welt. Unsere Mission ist es, flexible und effiziente "
+"Arbeitsumgebungen bereitzustellen."
+
+#: .\homepage\templates\homepage\about.html:21
+msgid ""
+"The platform offers features like personalized search, detailed information "
+"about each location, an evaluation and online reservation system, and "
+"networking and collaboration tools."
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:24
+#: .\homepage\templates\homepage\about.html:25
+msgid "Technology"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:26
+msgid ""
+"The development of CoWorkers followed an iterative and incremental process "
+"using agile methodology and tools like Python, Django, and PostgreSQL. The "
+"platform is designed to be intuitive, scalable, and secure, offering a "
+"complete experience for professionals seeking flexible and productive "
+"workspaces."
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:27
+msgid ""
+"Some innovative features include an intelligent recommendation system, "
+"advanced search filters, and an interactive map to facilitate location "
+"visualization."
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:32
+msgid "Additional Information"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:34
+msgid "Project Name: CoWorkers"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:35
+msgid "Developer: Ludmila Silveira"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:36
+msgid "Institution: UFSC (Federal University of Santa Catarina)"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:37
+msgid "Purpose: Connecting professionals with workspaces"
+msgstr ""
+
+#: .\homepage\templates\homepage\about.html:38
+msgid "Technologies Used: Python, Django, PostgreSQL"
+msgstr ""
+
+#: .\homepage\templates\homepage\add_workspace.html:3
+#: .\homepage\templates\homepage\add_workspace.html:24
+msgid "Add Workspace"
+msgstr ""
+
+#: .\homepage\templates\homepage\add_workspace.html:20
+msgid "Add New Workspace"
+msgstr ""
+
+#: .\homepage\templates\homepage\discover.html:5
+#: .\homepage\templates\homepage\header.html:30
+msgid "Discover"
+msgstr "Entdecken"
+
+#: .\homepage\templates\homepage\discover.html:11
+msgid "Search..."
+msgstr ""
+
+#: .\homepage\templates\homepage\discover.html:15
+msgid "Add New Space"
+msgstr ""
+
+#: .\homepage\templates\homepage\discover.html:20
+#: .\homepage\templates\homepage\footer.html:28
+msgid "Categories"
+msgstr "Kategorien"
+
+#: .\homepage\templates\homepage\discover.html:31
+msgid "Workspaces"
+msgstr ""
+
+#: .\homepage\templates\homepage\discover.html:41
+msgid "View Details"
+msgstr ""
+
+#: .\homepage\templates\homepage\error.html:3
+#: .\homepage\templates\homepage\more.html:3
+msgid "More"
+msgstr "Mehr"
+
+#: .\homepage\templates\homepage\events.html:3
+#: .\homepage\templates\homepage\header.html:32
+msgid "Events"
+msgstr ""
+
+#: .\homepage\templates\homepage\events.html:7
+msgid "Events Page"
+msgstr ""
+
+#: .\homepage\templates\homepage\events.html:8
+msgid "Content for the Events page goes here."
+msgstr ""
 
 #: .\homepage\templates\homepage\footer.html:6
 msgid ""
@@ -61,6 +333,7 @@ msgid "Subscribe"
 msgstr "Abonnieren"
 
 #: .\homepage\templates\homepage\footer.html:25
+#: .\homepage\templates\homepage\header.html:34
 msgid "Blog"
 msgstr "Blog"
 
@@ -68,17 +341,9 @@ msgstr "Blog"
 msgid "Latest Posts"
 msgstr "Neueste Beiträge"
 
-#: .\homepage\templates\homepage\footer.html:28
-msgid "Categories"
-msgstr "Kategorien"
-
 #: .\homepage\templates\homepage\footer.html:32
 msgid "Contact"
 msgstr "Kontakt"
-
-#: .\homepage\templates\homepage\footer.html:33
-msgid "Email"
-msgstr "E-Mail"
 
 #: .\homepage\templates\homepage\footer.html:34
 msgid "Phone"
@@ -92,66 +357,152 @@ msgstr "Adresse"
 msgid "Header Example"
 msgstr ""
 
-#: .\homepage\templates\homepage\header.html:16
+#: .\homepage\templates\homepage\header.html:25
 msgid "Logo"
 msgstr "Logo"
 
-#: .\homepage\templates\homepage\header.html:21
-msgid "Discover"
-msgstr "Entdecken"
+#: .\homepage\templates\homepage\header.html:31
+#: .\homepage\templates\homepage\review.html:3
+msgid "Favorite"
+msgstr ""
 
-#: .\homepage\templates\homepage\header.html:22
+#: .\homepage\templates\homepage\header.html:33
+#: .\homepage\templates\homepage\trips.html:4
 msgid "Trips"
 msgstr "Reisen"
 
-#: .\homepage\templates\homepage\header.html:23
-msgid "Review"
-msgstr "Bewertung"
-
-#: .\homepage\templates\homepage\header.html:24
-msgid "More"
+#: .\homepage\templates\homepage\more.html:7
+#, fuzzy
+#| msgid "More"
+msgid "More Page"
 msgstr "Mehr"
 
-#: .\homepage\templates\homepage\header.html:41
-msgid "Sign in"
+#: .\homepage\templates\homepage\more.html:8
+msgid "Content for the More page goes here."
 msgstr ""
 
-#: .\homepage\templates\homepage\home.html:3
-msgid "Home"
-msgstr "Startseite"
+#: .\homepage\templates\homepage\new_trip.html:3
+#: .\homepage\templates\homepage\trips.html:10
+#, fuzzy
+#| msgid "Trips"
+msgid "New Trip"
+msgstr "Reisen"
 
-#: .\homepage\templates\homepage\home.html:7
-msgid "Welcome to the Home Page"
-msgstr "Willkommen auf der Startseite"
+#: .\homepage\templates\homepage\new_trip.html:8
+msgid "Create New Trip"
+msgstr ""
 
-#: .\homepage\templates\homepage\home.html:8
-msgid "Country:"
-msgstr "Land:"
+#: .\homepage\templates\homepage\new_trip.html:12
+msgid "Create"
+msgstr ""
 
-#: .\homepage\templates\homepage\home.html:9
-msgid "Language:"
-msgstr "Sprache:"
+#: .\homepage\templates\homepage\review.html:7
+msgid "Favorite Page"
+msgstr ""
 
-#: .\setup\settings.py:93
+#: .\homepage\templates\homepage\review.html:22
+msgid "You have no favorite workspaces."
+msgstr ""
+
+#: .\homepage\templates\homepage\review.html:26
+msgid "Please log in to view your favorite workspaces."
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:14
+msgid "Future Trips"
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:23
+#: .\homepage\templates\homepage\trips.html:54
+msgid "Start Date:"
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:24
+#: .\homepage\templates\homepage\trips.html:55
+msgid "End Date:"
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:27
+msgid "Add Space"
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:36
+msgid "No upcoming trips yet!"
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:37
+#: .\homepage\templates\homepage\trips.html:62
+msgid "Click here to create your first trip."
+msgstr ""
+
+#: .\homepage\templates\homepage\trips.html:45
+#, fuzzy
+#| msgid "Trips"
+msgid "Past Trips"
+msgstr "Reisen"
+
+#: .\homepage\templates\homepage\trips.html:61
+msgid "No past trips yet!"
+msgstr ""
+
+#: .\homepage\templates\homepage\workspace_detail.html:14
+#, fuzzy
+#| msgid "Categories"
+msgid "Category"
+msgstr "Kategorien"
+
+#: .\homepage\templates\homepage\workspace_detail.html:15
+msgid "Location"
+msgstr ""
+
+#: .\homepage\templates\homepage\workspace_detail.html:17
+msgid "Working Hours"
+msgstr ""
+
+#: .\homepage\templates\homepage\workspace_detail.html:50
+msgid "Please log in to like this workspace."
+msgstr ""
+
+#: .\homepage\templates\homepage\workspace_detail.html:77
+#: .\homepage\templates\homepage\workspace_detail.html:82
+msgid "An error occurred. Please try again."
+msgstr ""
+
+#: .\setup\settings.py:119
 msgid "English"
 msgstr "Englisch"
 
-#: .\setup\settings.py:94
+#: .\setup\settings.py:120
 msgid "Portuguese"
 msgstr "Portugiesisch"
 
-#: .\setup\settings.py:95
+#: .\setup\settings.py:121
 msgid "Spanish"
 msgstr ""
 
-#: .\setup\settings.py:96
+#: .\setup\settings.py:122
 msgid "French"
 msgstr ""
 
-#: .\setup\settings.py:97
+#: .\setup\settings.py:123
 msgid "German"
 msgstr ""
 
-#: .\setup\settings.py:98
+#: .\setup\settings.py:124
 msgid "Italian"
 msgstr ""
+
+#~ msgid "Review"
+#~ msgstr "Bewertung"
+
+#~ msgid "Home"
+#~ msgstr "Startseite"
+
+#~ msgid "Welcome to the Home Page"
+#~ msgstr "Willkommen auf der Startseite"
+
+#~ msgid "Country:"
+#~ msgstr "Land:"
+
+#~ msgid "Language:"
+#~ msgstr "Sprache:"

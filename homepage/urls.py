@@ -1,6 +1,12 @@
 from django.urls import path
 from . import views
 from accounts.views import profile_view
+from django.conf.urls import handler400, handler403, handler404, handler500
+
+handler400 = views.error_view
+handler403 = views.error_view
+handler404 = views.error_view
+handler500 = views.error_view
 
 urlpatterns = [
     path('', views.discover_view, name='discover'),
