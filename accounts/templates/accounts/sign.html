@@ -30,7 +30,7 @@
             </form>
         </div>
         <div class="form-container sign-in-container {% if not show_signup %}active{% endif %}">
-            <form action="{% url 'signin' %}" method="POST">
+            <form action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
                 <h1>{% trans "Sign In" %}</h1>
                 <div class="social-container">
@@ -83,7 +83,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const signUpButton = document.getElementById('signUp');
-            const signInButton = document.getElementById('signIn');
+            const signInButton = document.getElementById('login');
             const container = document.getElementById('container');
 
             signUpButton.addEventListener('click', () => {
@@ -93,7 +93,7 @@
 
             signInButton.addEventListener('click', () => {
                 container.classList.remove('right-panel-active');
-                window.history.pushState({}, '', '{% url "signin" %}');
+                window.history.pushState({}, '', '{% url "login" %}');
             });
         });
     </script>

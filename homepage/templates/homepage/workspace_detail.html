@@ -18,7 +18,7 @@
         </div>
 
         <button class="like-button" data-workspace-id="{{ workspace.id }}">
-            {% if user.is_authenticated and liked %}
+            {% if user.id and liked %}
             <i><ion-icon name="heart" class="fas fa-heart liked"></ion-icon></i>
             {% else %}
             <i><ion-icon name="heart-outline" class="far fa-heart"></ion-icon></i>
@@ -48,7 +48,7 @@
 
             if (!isAuthenticated) {
                 alert("{% trans 'Please log in to like this workspace.' %}");
-                window.location.href = "{% url 'signin' %}?next={{ request.path }}";
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
                 return;
             }
 

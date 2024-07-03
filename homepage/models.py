@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from accounts.models import Users, Type
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -27,9 +28,12 @@ class Workspace(models.Model):
 
 class WorkspacePhoto(models.Model):
     workspace = models.ForeignKey(Workspace, related_name='photos', on_delete=models.CASCADE)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     file = models.CharField(max_length=255)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'WorkspacePhoto'
 
 class Notes(models.Model):
     note_sockets = models.IntegerField()

@@ -1,11 +1,31 @@
 {% extends 'homepage/header.html' %}
 {% load i18n %}
-{% block title %}{% trans "Review" %}{% endblock %}
+{% block title %}{% trans "Favorite" %}{% endblock %}
 
 {% block content %}
 <section style="padding: 20px;">
-    <h1>{% trans "Review Page" %}</h1>
-    <p>{% trans "Content for the Review page goes here." %}</p>
+    <h1>{% trans "Favorite Page" %}</h1>
+
+    {% if user.is_authenticated %}
+        <div class="favorites-container">
+            {% if favorite_workspaces %}
+                {% for workspace in favorite_workspaces %}
+                    <div class="workspace-card">
+                        {% if workspace.photos.exists %}
+                        <img src="{{ workspace.photos.first.file }}" alt="{{ workspace.name }}" class="workspace-image" />
+                        {% endif %}
+                        <h3>{{ workspace.name }}</h3>
+                        <p>{{ workspace.category.name }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>{% trans "You have no favorite workspaces." %}</p>
+            {% endif %}
+        </div>
+        {% else %}
+        <p>{% trans "Please log in to view your favorite workspaces." %}</p>
+        <a href="{% url 'login' %}" class="btn btn-primary">Sign In</a>
+    {% endif %}
 </section>
 
 {% include 'homepage/footer.html' %}

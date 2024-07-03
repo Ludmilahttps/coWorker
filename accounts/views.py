@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
+
 from .forms import SignUpForm, LoginForm
 from .models import Users
-from homepage.views import get_context_data
+from homepage.views import get_context_data, discover_view
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.translation import activate, get_language, get_language_info
+from django.contrib.auth.backends import ModelBackend
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -14,6 +16,7 @@ from setup.settings import YOUR_GOOGLE_CLIENT_ID
 
 import json
 import time
+from django.utils import timezone
 import logging
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import render
@@ -24,6 +27,31 @@ from google.auth.transport import requests
 
 logger = logging.getLogger(__name__)
 
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data.get('email')
+#             password = form.cleaned_data.get('password')
+#             try:
+#                 user = Users.objects.get(email=email)
+#                 if user.check_password(password):
+#                     request.session['user_id'] = user.id
+#                     request.session['user_name'] = user.name
+#                     request.session['user_email'] = user.email
+#                     request.session['user_type'] = user.type_id
+
+#                     context = get_context_data(request)
+#                     # return discover_view(request)
+#                     return render(request, 'homepage/discover.html', context)
+#                 else:
+#                     form.add_error('password', 'Password is incorrect')
+#             except Users.DoesNotExist:
+#                 form.add_error('email', 'Email not found')
+#     else:
+#         form = LoginForm()
+#     return render(request, 'accounts/sign.html', {'form': form})
+
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -33,13 +61,20 @@ def login_view(request):
             try:
                 user = Users.objects.get(email=email)
                 if user.check_password(password):
+                    user.last_login = timezone.now()
+                    user.save(update_fields=['last_login'])
+
                     request.session['user_id'] = user.id
                     request.session['user_name'] = user.name
                     request.session['user_email'] = user.email
                     request.session['user_type'] = user.type_id
 
-                    context = get_context_data(request)
-                    return render(request, 'homepage/discover.html', context)
+                    # Autenticar o usuário manualmente
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user)
+
+                    next_url = request.GET.get('next', 'discover')
+                    return redirect(next_url)
                 else:
                     form.add_error('password', 'Password is incorrect')
             except Users.DoesNotExist:
@@ -93,6 +128,18 @@ def google_login(request):
         logger.error("Chave 'id_token' não encontrada na requisição")
         return HttpResponseBadRequest("Token não encontrado")
 
+# def signup_view(request):
+#     if request.method == 'POST':
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.password = make_password(form.cleaned_data['password'])
+#             user.save()
+#             return redirect('login')
+#     else:
+#         form = SignUpForm()
+#     return render(request, 'accounts/sign.html', {'form': form, 'show_signup': True})
+
 def signup_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -100,7 +147,18 @@ def signup_view(request):
             user = form.save(commit=False)
             user.password = make_password(form.cleaned_data['password'])
             user.save()
-            return redirect('signin')
+            
+            # Log in the user after signing up
+            user = authenticate(email=form.cleaned_data['email'], password=form.cleaned_data['password'])
+            if user is not None:
+                login(request, user)
+                request.session['user_id'] = user.id
+                request.session['user_name'] = user.name
+                request.session['user_email'] = user.email
+                request.session['user_type'] = user.type_id
+
+                next_url = request.GET.get('next', 'discover')
+                return redirect(next_url)
     else:
         form = SignUpForm()
     return render(request, 'accounts/sign.html', {'form': form, 'show_signup': True})

@@ -48,7 +48,7 @@ def get_context_data(request):
     #         'email': 'guest@example.com',
     #         'is_authenticated': False
     #     }
-    if request.user.is_authenticated:
+    if 'user_id' in request.session:
         context['user'] = {
             'id': request.session.get('user_id'),
             'name': request.session.get('user_name'),
@@ -73,8 +73,16 @@ def events(request):
     context = get_context_data(request)
     return render(request, 'homepage/events.html', context)
 
+@login_required
 def review(request):
+    user = get_object_or_404(Users, email=request.user.email)
+    favorite_workspaces = Workspace.objects.filter(likedworkspaces__user=user)
+
     context = get_context_data(request)
+    context.update({
+        'favorite_workspaces': favorite_workspaces
+    })
+
     return render(request, 'homepage/review.html', context)
 
 def about(request):
