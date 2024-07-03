@@ -27,7 +27,6 @@ INSTALLED_APPS = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    'accounts.backends.EmailBackend',
 ]
 
 SITE_ID = 1
@@ -134,6 +133,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_REDIRECT_URL = 'home'
@@ -141,30 +143,9 @@ LOGOUT_REDIRECT_URL = 'home'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'root': {
-#         'handlers': ['console'],
-#         'level': 'DEBUG',
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
-
+ACCOUNT_USERNAME_REQUIRED = False
 
 YOUR_GOOGLE_CLIENT_ID = '1077288063347-j2dsscin33kr2diofl4kghsdr3dfgqvl.apps.googleusercontent.com'
 YOUR_GOOGLE_CLIENT_SECRET = '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'

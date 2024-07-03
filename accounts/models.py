@@ -33,6 +33,8 @@ class Users(AbstractBaseUser, PermissionsMixin):
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
     registration_date = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']

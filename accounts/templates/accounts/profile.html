@@ -11,17 +11,16 @@
 
         <div class="profile-sidebar">
             <div class="profile-card">
-                <img src="{% static 'img/avatar.png' %}" alt="{% trans 'Profile Image' %}"
-                    class="rounded-circle avatar-lg img-thumbnail">
+                <img src="{% static 'images/profile_picture.png' %}" alt="{% trans 'Profile Image' %}" class="rounded-circle avatar-lg img-thumbnail">
                 <h2 class="profile-name">{{ user.name }}</h2>
                 <p class="profile-email">{{ user.email }}</p>
-                <p class="profile-location">Bay Area, San Francisco, CA</p>
-                <p class="profile-location">{% if user.location %}{{ user.location }}{% else %} - {% endif %}</p>
-
-                <div class="profile-actions">
-                    <button type="button" class="btn btn-primary">{% trans "Follow" %}</button>
-                    <button type="button" class="btn btn-secondary">{% trans "Message" %}</button>
-                </div>
+                <p class="profile-location">
+                    {% if city != 'Unknown' %}
+                        {{ city }}, {{ country }}
+                    {% else %}
+                        {% trans "Em algum lugar do mundo" %}
+                    {% endif %}
+                </p>
             </div>
             
             <div class="card-box">
@@ -109,7 +108,6 @@
 </section>
 
 <style>
-/* Estilos gerais */
 .profile-section {
     display: flex;
     justify-content: center;
@@ -119,8 +117,8 @@
 
 .profile-container {
     display: flex;
-    max-width: 960px; /* Largura máxima do container */
-    width: 100%; /* Ocupa a largura total da tela */
+    max-width: 960px;
+    width: 100%;
 }
 
 
@@ -128,7 +126,6 @@
     flex: 1;
     margin-right: 20px;
     
-    /* Estilos da imagem do perfil */
     .avatar-lg {
         width: 100px;
         height: 100px;
@@ -147,6 +144,7 @@
 .profile-name {
     color: #203354;
     margin-bottom: 5px;
+    font-size: 25px;
 }
 
 .profile-email {
@@ -159,38 +157,37 @@
     margin-bottom: 15px;
 }
 
-/* Estilos dos botões de ação */
 .profile-actions button {
     margin: 5px;
 }
 
-/* Estilos do conteúdo do perfil */
 .profile-content {
     flex: 2;
 }
 
 .card-box {
-    padding: 20px;
+    padding: 40px;
     border: 1px solid #e7eaec;
     margin-bottom: 20px;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .header-title {
-    font-size: 18px;
+    font-size: 20px;
+    padding: 0px;
+    margin: 0px 0px 20px 0px;
     font-weight: 600;
-    margin-bottom: 20px;
     color: #203354;
 }
 
-/* Estilos da lista de informações do usuário */
 .list-group-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #203354; /* Cor do texto principal */
+    color: #203354;
 }
 
 .list-group-item a {
@@ -198,7 +195,6 @@
     text-decoration: none;
 }
 
-/* Estilos da barra de progresso */
 .progress {
     background-color: #e9ecef;
     height: 7px;
@@ -208,7 +204,6 @@
     background-color: #4CAF50;
 }
 
-/* Estilos dos projetos */
 .project-status-container {
     display: flex;
     flex-direction: column;
@@ -219,7 +214,6 @@
     text-align: left;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .profile-container {
         flex-direction: column;

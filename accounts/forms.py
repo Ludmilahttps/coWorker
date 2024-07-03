@@ -1,5 +1,6 @@
 from django import forms
 from .models import Users
+from django.contrib.auth.forms import AuthenticationForm
 
 class SignUpForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput)
@@ -20,3 +21,6 @@ class SignUpForm(forms.ModelForm):
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(label='Email', max_length=254)
