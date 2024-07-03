@@ -199,8 +199,3 @@ def workspace_detail_view(request, workspace_id):
         })
     
     return render(request, 'homepage/workspace_detail.html', context)
-    
-@login_required
-def profile_view(request):
-    context = get_context_data(request)
-    return render(request, 'homepage/profile.html', context)

@@ -1,0 +1,237 @@
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Profile" %}{% endblock %}
+
+{% block content %}
+
+<section class="profile-section">
+    <div class="profile-container">
+
+        <div class="profile-sidebar">
+            <div class="profile-card">
+                <img src="{% static 'img/avatar.png' %}" alt="{% trans 'Profile Image' %}"
+                    class="rounded-circle avatar-lg img-thumbnail">
+                <h2 class="profile-name">{{ user.name }}</h2>
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-location">Bay Area, San Francisco, CA</p>
+                <p class="profile-location">{% if user.location %}{{ user.location }}{% else %} - {% endif %}</p>
+
+                <div class="profile-actions">
+                    <button type="button" class="btn btn-primary">{% trans "Follow" %}</button>
+                    <button type="button" class="btn btn-secondary">{% trans "Message" %}</button>
+                </div>
+            </div>
+            
+            <div class="card-box">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="fa fa-globe"></i>
+                        {% trans "Website" %}
+                        <a href="https://bootdey.com" class="float-right" target="_blank">https://bootdey.com</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-github"></i>
+                        {% trans "GitHub" %}
+                        <a href="https://github.com/bootdey" class="float-right" target="_blank">bootdey</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-twitter"></i>
+                        {% trans "Twitter" %}
+                        <a href="https://twitter.com/bootdey" class="float-right" target="_blank">@bootdey</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-instagram"></i>
+                        {% trans "Instagram" %}
+                        <a href="https://instagram.com/bootdey" class="float-right" target="_blank">bootdey</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-facebook"></i>
+                        {% trans "Facebook" %}
+                        <a href="https://facebook.com/bootdey" class="float-right" target="_blank">bootdey</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="card-box">
+                <h2 class="header-title">{% trans "User Information" %}</h2>
+                <div class="table-responsive">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Full Name</th>
+                                <td>{{ user.name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td>(239) 816-9029</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Mobile</th>
+                                <td>(320) 380-4539</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>Bay Area, San Francisco, CA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-primary mt-3">{% trans "Edit" %}</button>
+            </div>
+
+            <div class="card-box">
+                <h2 class="header-title">{% trans "Workspace Statistics" %}</h2>
+                <div class="workspace-stats-container">
+                    <div class="workspace-stat-item">
+                        <p class="text-muted mb-2">{% trans "Total Workspaces Liked" %} <span class="float-right">{{ total_workspaces_liked }}</span></p>
+                    </div>
+                    <div class="workspace-stat-item">
+                        <p class="text-muted mb-2">{% trans "Top Cities with Liked Workspaces" %}</p>
+                        <ul>
+                            {% for city, count in top_cities %}
+                            <li>{{ city }}: {{ count }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+/* Estilos gerais */
+.profile-section {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.profile-container {
+    display: flex;
+    max-width: 960px; /* Largura máxima do container */
+    width: 100%; /* Ocupa a largura total da tela */
+}
+
+
+.profile-sidebar {
+    flex: 1;
+    margin-right: 20px;
+    
+    /* Estilos da imagem do perfil */
+    .avatar-lg {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.profile-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-name {
+    color: #203354;
+    margin-bottom: 5px;
+}
+
+.profile-email {
+    color: #757575;
+    margin-bottom: 10px;
+}
+
+.profile-location {
+    color: #757575;
+    margin-bottom: 15px;
+}
+
+/* Estilos dos botões de ação */
+.profile-actions button {
+    margin: 5px;
+}
+
+/* Estilos do conteúdo do perfil */
+.profile-content {
+    flex: 2;
+}
+
+.card-box {
+    padding: 20px;
+    border: 1px solid #e7eaec;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #203354;
+}
+
+/* Estilos da lista de informações do usuário */
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #203354; /* Cor do texto principal */
+}
+
+.list-group-item a {
+    color: #4A90E2;
+    text-decoration: none;
+}
+
+/* Estilos da barra de progresso */
+.progress {
+    background-color: #e9ecef;
+    height: 7px;
+}
+
+.progress-bar {
+    background-color: #4CAF50;
+}
+
+/* Estilos dos projetos */
+.project-status-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.project-item {
+    text-align: left;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
+</style>
+
+{% include 'homepage/footer.html' %}
+{% endblock %}
+

@@ -9,6 +9,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.translation import activate, get_language, get_language_info
 from django.contrib.auth.backends import ModelBackend
+from django.db.models import Count
+from homepage.models import LikedWorkspaces, Workspace
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -24,33 +26,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
-
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data.get('email')
-#             password = form.cleaned_data.get('password')
-#             try:
-#                 user = Users.objects.get(email=email)
-#                 if user.check_password(password):
-#                     request.session['user_id'] = user.id
-#                     request.session['user_name'] = user.name
-#                     request.session['user_email'] = user.email
-#                     request.session['user_type'] = user.type_id
-
-#                     context = get_context_data(request)
-#                     # return discover_view(request)
-#                     return render(request, 'homepage/discover.html', context)
-#                 else:
-#                     form.add_error('password', 'Password is incorrect')
-#             except Users.DoesNotExist:
-#                 form.add_error('email', 'Email not found')
-#     else:
-#         form = LoginForm()
-#     return render(request, 'accounts/sign.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -69,7 +47,6 @@ def login_view(request):
                     request.session['user_email'] = user.email
                     request.session['user_type'] = user.type_id
 
-                    # Autenticar o usuário manualmente
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
                     login(request, user)
 
@@ -82,14 +59,6 @@ def login_view(request):
     else:
         form = LoginForm()
     return render(request, 'accounts/sign.html', {'form': form})
-
-class IndexView(TemplateView):
-    template_name = "index.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context['YOUR_GOOGLE_CLIENT_ID'] = YOUR_GOOGLE_CLIENT_ID
-        return context
 
 @csrf_exempt
 def google_login(request):
@@ -173,3 +142,20 @@ def home_view(request):
         'user': request.user,
     }
     return render(request, "accounts/index.html", context)
+
+@login_required
+def profile_view(request):
+    user = request.user
+    total_workspaces_liked = LikedWorkspaces.objects.filter(user=user).count()
+    top_cities = (LikedWorkspaces.objects.filter(user=user)
+                  .values('workspace__city')
+                  .annotate(count=Count('workspace__city'))
+                  .order_by('-count')[:5])
+    
+    context = get_context_data(request)
+    context.update({
+        'user': user,
+        'total_workspaces_liked': total_workspaces_liked,
+        'top_cities': [(city['workspace__city'], city['count']) for city in top_cities]
+    })
+    return render(request, 'accounts/profile.html', context)
