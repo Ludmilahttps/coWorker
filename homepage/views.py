@@ -3,7 +3,7 @@ from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
-from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces
+from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes
 from accounts.models import Users
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -12,6 +12,9 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 import requests
+from geopy.geocoders import GoogleV3
+from django.contrib import messages
+import setup.settings as GOOGLE_MAPS_API_KEY
 
 def get_context_data(request):
     ip_address = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -79,13 +82,18 @@ def get_context_data(request):
 
 def error_view(request, exception=None):
     status_code = 500
+    error_message = 'An unexpected error occurred.'
+    
     if exception:
-        status_code = exception.status_code
-        
-    context = {
+        status_code = getattr(exception, 'status_code', 500)
+        error_message = str(exception)
+
+    context = get_context_data(request)
+    context.update({
         'status_code': status_code,
-        'error_message': exception
-    }
+        'error_message': error_message
+    })
+
     return render(request, 'homepage/error.html', context)
 
 def handle_view_errors(view_func):
@@ -94,6 +102,8 @@ def handle_view_errors(view_func):
             return view_func(*args, **kwargs)
         except Http404:
             return error_view(args[0], exception=Http404("Page not found"))
+        except Users.DoesNotExist:
+            raise
         except Exception as e:
             return error_view(args[0], exception=e)
     return wrapper
@@ -171,22 +181,40 @@ def discover_view(request):
     return render(request, 'homepage/discover.html', context)
 
 @handle_view_errors
-def add_workspace_view(request, id=None):
-    workspace = get_object_or_404(Workspace, id=id) if id else None
-
+def add_workspace_view(request):
     if request.method == 'POST':
-        form = WorkspaceForm(request.POST, instance=workspace)
+        form = WorkspaceForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            workspace = form.save(commit=False)
+            address = request.POST.get('address')
+            latitude = request.POST.get('latitude')
+            longitude = request.POST.get('longitude')
+
+            geolocator = GoogleV3(api_key=settings.GOOGLE_MAPS_API_KEY)
+            location = geolocator.reverse((latitude, longitude), exactly_one=True)
+            if location:
+                address_components = location.raw.get('address_components', [])
+                address_dict = {component['types'][0]: component['long_name'] for component in address_components}
+
+                workspace.country = address_dict.get('country', '')
+                workspace.state = address_dict.get('administrative_area_level_1', '')
+                workspace.city = address_dict.get('locality', '') or address_dict.get('administrative_area_level_2', '')
+                workspace.neighborhood = address_dict.get('sublocality_level_1', '') or address_dict.get('sublocality', '') or address_dict.get('neighborhood', '') or address_dict.get('political', '')
+                workspace.street = address_dict.get('route', '')
+                workspace.number = address_dict.get('street_number', '')
+                workspace.postalCode = address_dict.get('postal_code', '')
+                workspace.complement = address_dict.get('subpremise', '')
+                workspace.latitude = latitude
+                workspace.longitude = longitude
+
+            workspace.save()
             return redirect('discover')
     else:
-        form = WorkspaceForm(instance=workspace)
+        form = WorkspaceForm()
 
-    context = get_context_data(request)
-    context.update({
+    context = {
         'form': form,
-        'workspace': workspace
-    })
+    }
     return render(request, 'homepage/add_workspace.html', context)
 
 @handle_view_errors
@@ -227,19 +255,50 @@ def like_workspace(request, workspace_id):
 @handle_view_errors
 def workspace_detail_view(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
+    try:
+        notes = Notes.objects.get(workspace=workspace)
+    except Notes.DoesNotExist:
+        notes = {
+            'note_sockets': 0,
+            'note_internet': 0,
+            'note_silence': 0,
+            'note_menu_price': 0,
+            'note_daily_price': 0,
+            'note_general': 4,
+        }
 
     context = get_context_data(request)
     context.update({
-        'workspace': workspace
+        'workspace': workspace,
+        'notes': notes,
+        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
     })
 
     if request.user.is_authenticated:
-        user = Users.objects.get(email=request.session.get('user_email'))
-        liked = LikedWorkspaces.objects.filter(user=user.id, workspace=workspace_id).exists()
-        print(f"liked: {liked}")
-        context.update({
-            'liked': liked
-        })
+        try:
+            user = Users.objects.get(email=request.session.get('user_email'))
+            liked = LikedWorkspaces.objects.filter(user=user.id, workspace=workspace_id).exists()
+            context.update({
+                'liked': liked
+            })
+        except Users.DoesNotExist:
+            context.update({
+                'liked': False
+            })
     
     return render(request, 'homepage/workspace_detail.html', context)
 
+@handle_view_errors
+def get_coordinates(address, api_key):
+    base_url = "https://maps.googleapis.com/maps/api/geocode/json"
+    params = {
+        'address': address,
+        'key': api_key
+    }
+    response = requests.get(base_url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        if data['status'] == 'OK':
+            location = data['results'][0]['geometry']['location']
+            return location['lat'], location['lng']
+    return None, None

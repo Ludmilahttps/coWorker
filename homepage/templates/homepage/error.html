@@ -1,5 +1,7 @@
 {% extends 'homepage/header.html' %}
 {% load i18n %}
+{% load static %}
+
 {% block title %}{% trans "More" %}{% endblock %}
 
 {% block content %}
@@ -7,21 +9,21 @@
     <title>Error {{ status_code }}</title>
     <div class="error-container">
         {% if status_code == 400 %}
-            <img src="{% static 'error/400error.svg' %}" alt="400 Not Found">
+            <img src="{% static 'error/400error.svg' %}" alt="400">
         {% elif status_code == 401 %}
-            <img src="{% static 'error/401error.svg' %}" alt="401 Not Found">
+            <img src="{% static 'error/401error.svg' %}" alt="401">
         {% elif status_code == 403 %}
-            <img src="{% static 'error/403error.svg' %}" alt="403 Not Found">
+            <img src="{% static 'error/403error.svg' %}" alt="403">
         {% elif status_code == 404 %}
-            <img src="{% static 'error/404error.svg' %}" alt="404 Not Found">
+            <img src="{% static 'error/404error.svg' %}" alt="404">
         {% elif status_code == 429 %}
-            <img src="{% static 'error/429error.svg' %}" alt="429 Forbidden">
+            <img src="{% static 'error/429error.svg' %}" alt="429">
         {% elif status_code == 500 %}
-            <img src="{% static 'error/500error.svg' %}" alt="500 Internal Server Error">
+            <img src="{% static 'error/500error.svg' %}" alt="500">
         {% elif status_code == 503 %}
-            <img src="{% static 'error/503error.svg' %}" alt="503 Internal Server Error">
+            <img src="{% static 'error/503error.svg' %}" alt="503">
         {% elif status_code == 504 %}
-            <img src="{% static 'error/504error.svg' %}" alt="504 Internal Server Error">
+            <img src="{% static 'error/504error.svg' %}" alt="504">
         {% else %}
             <img src="{% static 'error/genericError.svg' %}" alt="Error">
         {% endif %}
@@ -29,7 +31,6 @@
         <a href="{% url 'discover' %}" class="btn btn-primary">Return to Home</a>
     </div>
 </body>
-</html>
 
 <style>
     .error-container {
@@ -37,17 +38,20 @@
         padding: 20px;
     }
     .error-container img {
-        max-width: 100%;
+        max-width: 30%;
         height: auto;
     }
     .btn {
         display: inline-block;
         padding: 10px 20px;
         margin-top: 20px;
-        background-color: #007bff;
+        background-color: #203354;
         color: white;
         text-decoration: none;
         border-radius: 5px;
+    }
+    .btn:hover {
+        background-color: #4A90E2;
     }
 </style>
 

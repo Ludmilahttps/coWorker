@@ -47,7 +47,7 @@
             {% endif %}
             <nav>
                 <ul>
-                    {% if user.id %}
+                    {% if user.is_authenticated %}
                         <li>
                             <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                                 {% csrf_token %}

@@ -21,10 +21,15 @@ class Workspace(models.Model):
     number = models.CharField(max_length=10, blank=True, null=True)
     complement = models.CharField(max_length=100, blank=True, null=True)
     postalCode = models.CharField(max_length=20, blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     workingHours = models.CharField(max_length=100, blank=True, null=True)
     averageRating = models.FloatField(blank=True, null=True)
     owner = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
 class WorkspacePhoto(models.Model):
     workspace = models.ForeignKey(Workspace, related_name='photos', on_delete=models.CASCADE)
@@ -36,6 +41,7 @@ class WorkspacePhoto(models.Model):
         db_table = 'WorkspacePhoto'
 
 class Notes(models.Model):
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
     note_sockets = models.IntegerField()
     note_internet = models.IntegerField()
     note_silence = models.IntegerField()

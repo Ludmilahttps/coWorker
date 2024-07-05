@@ -5,35 +5,149 @@
 {% block title %}{{ workspace.name }}{% endblock %}
 
 {% block content %}
-<section class="workspace-detail-section">
-    <div class="workspace-info">
-        <h2>{{ workspace.name }}</h2>
-        <p>{{ workspace.description }}</p>
-
-        <div class="workspace-details">
-            <p><strong>{% trans "Category" %}:</strong> {{ workspace.category.name }}</p>
-            <p><strong>{% trans "Location" %}:</strong> {{ workspace.city }}, {{ workspace.state }},
-                {{ workspace.country }}</p>
-            <p><strong>{% trans "Working Hours" %}:</strong> {{ workspace.workingHours }}</p>
+<div class="container">
+    <div class="header-container">
+        <h1>{{ workspace.name }}</h1>
+        <div class="carousel-container">
+            <button class="carousel-control-prev" id="prev-btn">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"><ion-icon name="arrow-back-outline"></ion-icon></span>
+            </button>
+            <div class="carousel-wrapper">
+                <div class="carousel-inner">
+                    {% if workspace.photos.exists %}
+                        {% for photo in workspace.photos.all %}
+                        <div class="carousel-item">
+                            <img src="{{ photo.file.url }}" alt="{{ workspace.name }}" class="carousel-img">
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        {% for i in "123" %}
+                        <div class="carousel-item">
+                            <img src="{% static 'images/no_images.svg' %}" alt="{{ workspace.name }}" class="carousel-img">
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <button class="carousel-control-next" id="next-btn">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"><ion-icon name="arrow-forward-outline"></ion-icon></span>
+            </button>
         </div>
-
-        <button class="like-button" data-workspace-id="{{ workspace.id }}">
-            {% if user.id and liked %}
-            <i><ion-icon name="heart" class="fas fa-heart liked"></ion-icon></i>
+        <button class="btn btn-outline-primary like-button mt-3" data-workspace-id="{{ workspace.id }}">
+            {% if is_authenticated and liked %}
+                <ion-icon name="heart" class="fas fa-heart liked"></ion-icon>
             {% else %}
-            <i><ion-icon name="heart-outline" class="far fa-heart"></ion-icon></i>
+                <ion-icon name="heart-outline" class="far fa-heart"></ion-icon>
             {% endif %}
         </button>
     </div>
-
-    {% if workspace.photos.exists %}
-    <div class="workspace-photos">
-        {% for photo in workspace.photos.all %}
-        <img src="{{ photo.file.url }}" alt="{{ workspace.name }}" class="workspace-photo">
-        {% endfor %}
+    <div class="info-container">
+        <div class="ratings-card">
+            <div class="margin">
+                <h2 class="card-title">{% trans "Ratings and review" %}</h2>
+                <div class="card mt-3">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">{% trans "General" %}</h6>
+                            <div class="star-rating">
+                                {% for i in 'xxxxx'|center:5 %}
+                                    <i class="fas fa-star {% if forloop.counter > notes.note_general %}empty{% endif %}"></i>
+                                {% endfor %}
+                                <span class="text-secondary ml-2">({{ notes.note_general }} / 5)</span> 
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">{% trans "Sockets" %}</h6>
+                            <span class="text-secondary">{{ notes.note_sockets }} / 5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">{% trans "Internet" %}</h6>
+                            <span class="text-secondary">{{ notes.note_internet }} / 5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">{% trans "Silence" %}</h6>
+                            <span class="text-secondary">{{ notes.note_silence }} / 5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">{% trans "Menu Price" %}</h6>
+                            <span class="text-secondary">{{ notes.note_menu_price }} / 5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">{% trans "Daily Price" %}</h6>
+                            <span class="text-secondary">{{ notes.note_daily_price }} / 5</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>    
+        </div>
+        <div class="details-card">
+            <div class="margin">
+                <h2 class="card-title">{% trans "Details" %}</h2>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">{% trans "Category" %}</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ workspace.category.name }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">{% trans "Description" %}</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ workspace.description }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">{% trans "Owner" %}</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {% if workspace.owner %}
+                                    {{ workspace.owner.name }}
+                                {% else %}
+                                    {% trans "Not claimed yet" %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">{% trans "Website" %}</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ workspace.website|default:_("Not available") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="location-card">
+                <div class="margin">
+                    <h2 class="card-title">{% trans "Location and contact" %}</h2>
+                    <div id="map"></div>
+                    <p><ion-icon name="location-sharp"></ion-icon> {{ workspace.street }}, {{ workspace.number }}, {{ workspace.city }}, {{ workspace.state }}, {{ workspace.country }}</p>
+                    
+                    {% if workspace.email %}
+                        <p><ion-icon name="mail"></ion-icon> {{ workspace.email }}</p>
+                    {% else %}
+                        <p><ion-icon name="mail"></ion-icon> {% trans "No email provided" %}</p>
+                    {% endif %}
+                    
+                    {% if workspace.phone %}
+                        <p><ion-icon name="call"></ion-icon> {{ workspace.phone }}</p>
+                    {% else %}
+                        <p><ion-icon name="call"></ion-icon> {% trans "No phone number provided" %}</p>
+                    {% endif %}
+                </div>
+        </div>
     </div>
-    {% endif %}
-</section>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -82,76 +196,342 @@
                 alert("{% trans 'An error occurred. Please try again.' %}");
             });
         });
+
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const carouselInner = document.querySelector('.carousel-inner');
+
+        prevBtn.addEventListener('click', function() {
+            carouselInner.scrollBy({ left: -carouselInner.clientWidth, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', function() {
+            carouselInner.scrollBy({ left: carouselInner.clientWidth, behavior: 'smooth' });
+        });
+
+        initMap();
     });
+</script>
+<script>
+    function initMap() {
+        const location = { lat: parseFloat("{{ workspace.latitude }}"), lng: parseFloat("{{ workspace.longitude }}") };
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: location
+        });
+        const marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: "{{ workspace.name }}"
+        });
+    }
 </script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuQTrofOez0YlZgK1cMnGSOnAGFZQVKuU&callback=initMap&libraries=places"></script>
 
 <style>
-    .workspace-detail-section {
+    .container {
+        width: 100%;
+        
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+    }
+
+    .header-container {
+        width: 90%;
+        max-width: 1200px;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        margin: 20px;
+        text-align: start;
+    }
+
+    .header-container h1 {
+        font-size: 28px;
+        font-weight: 300;
+        margin-bottom: 5px;
+        font-family: 'Montserrat', sans-serif; 
+        font-weight: 600;                   
+        color: #203354;
+    }
+
+    .carousel-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .carousel-wrapper {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .carousel-inner {
+        display: flex;
+        flex-direction: row;
+        transition: transform 0.5s ease;
+    }
+
+    .carousel-item {
+        min-width: calc(33.33% - 10px);
+        margin: 0 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .carousel-img {
+        max-width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .fixed-size-img {
+        width: 300px;
+        height: 600px;
+        object-fit: cover;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .carousel-control-prev {
+        left: 10px;
+    }
+
+    .carousel-control-next {
+        right: 10px;
+    }
+
+    .workspace-detail-section {
         font-family: 'Roboto', sans-serif;
     }
 
-    .workspace-info {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: center; /* Centraliza o texto */
-        margin-bottom: 20px; /* Adiciona espaçamento abaixo */
-    }
-
-    .workspace-info h2 {
-        color: #203354;
-        margin-bottom: 10px;
-    }
-
-    .workspace-details p {
-        color: #757575;
-        margin: 5px 0;
-        text-align: left; /* Alinha o texto à esquerda */
-    }
-    
-    .workspace-photos {
+    .info-container {
+        width: 90%;
+        max-width: 1200px;
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin: 20px;
     }
 
-    .workspace-photo {
-        max-width: 100%; /* Garante que as fotos não ultrapassem a largura do container */
-        height: auto;
-        border-radius: 8px;
+    .ratings-card,
+    .details-card,
+    .location-card {
+        width: 30%;
+        height: 450px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 20px;
+        border-radius: 35px 0px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    /* Estilos do botão "Like" */
+    .margin {
+        width: 90%;
+        height: 90%;
+    }
+
+    .card-title {
+        font-family: 'Montserrat', sans-serif; 
+        font-weight: 600;                   
+        color: #203354;                   
+        text-align: start;
+        font-size: 20px;
+        margin: 20px 0px 20px 0px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    #map {
+        height: 200px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .card-body p {
+        margin-bottom: 0;
+    }
+
     .like-button {
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 24px; /* Aumenta o tamanho do ícone */
+        font-size: 34px;
+        right: 0px;
+        position: relative;
     }
 
     .like-button .liked {
-        color: #ff4d4d; /* Cor vermelha para o coração curtido */
+        color: #ff4d4d;
     }
 
-    /* Responsividade para telas menores */
-    @media (max-width: 768px) {
-        .workspace-detail-section {
-            padding: 10px;
-        }
-
-        .workspace-info {
-            padding: 15px;
-        }
+    .rounded-circle {
+        border-radius: 50%;
     }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .mb-0 {
+        margin-bottom: 0;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-secondary {
+        color: #6c757d;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    body {
+    margin-top:20px;
+    background:#f8f8f8;
+}
+
+/* Main container for the profile content */
+.profile-content {
+    display: flex; /* Enable flexbox for easy column layout */
+}
+
+/* Left column (Profile navigation) */
+.profile-nav {
+    width: 25%; /* Adjust width as needed */
+    margin-right: 20px; /* Add some spacing between columns */
+}
+
+.panel {
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.user-heading {
+    background: #f2f2f2;
+    text-align: center;
+    padding: 30px;
+}
+
+.user-heading img {
+    width: 98px;
+    height: 98px;
+    margin: 0 auto;
+}
+
+.user-heading h1 {
+    font-size: 22px;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.user-heading p {
+    font-size: 12px;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.bio-graph-heading {
+    background: #f7f7f7;
+    padding: 10px;
+    font-style: italic;
+    text-align: center;
+    font-size: 12px;
+}
+
+.bio-graph-info {
+    padding: 40px 0;
+}
+
+.bio-graph-info h1 {
+    font-size: 15px;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+.bio-row {
+    width: 50%;
+    float: left;
+    margin-bottom: 10px;
+    padding:0 15px;
+}
+
+.bio-row p span {
+    width: 100px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    color: #fff;
+    background-color: #3498db;
+}
+
+.profile-info {
+    width: 75%;
+}
+
+.workspace-detail-section {
+    font-family: 'Roboto', sans-serif;
+}
+
+.ratings-card .list-group-item {
+    font-size: 14px;
+}
+
+.ratings-card .list-group-item:first-child {
+    font-size: 18px;  
+}
+
+.star-rating {
+    display: inline-flex;
+}
+
+.star-rating i {
+    color: gold;
+    margin-right: 3px;
+}
+
+.star-rating i.empty {
+    color: lightgray;
+}
+
+.ratings-card ul {
+    list-style-type: none; 
+    padding-left: 0;
+}
+
 </style>
 
 {% include 'homepage/footer.html' %}

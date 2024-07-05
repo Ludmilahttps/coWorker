@@ -4,27 +4,88 @@
 
 {% block content %}
 <section style="padding: 20px;">
-    {% if workspace %}
-        <h2>{{ workspace.name }}</h2>
-        <p>{{ workspace.description }}</p>
-        <p><strong>Country:</strong> {{ workspace.country }}</p>
-        <p><strong>State:</strong> {{ workspace.state }}</p>
-        <p><strong>City:</strong> {{ workspace.city }}</p>
-        <p><strong>Neighborhood:</strong> {{ workspace.neighborhood }}</p>
-        <p><strong>Street:</strong> {{ workspace.street }}, {{ workspace.number }}</p>
-        <p><strong>Complement:</strong> {{ workspace.complement }}</p>
-        <p><strong>Postal Code:</strong> {{ workspace.postalCode }}</p>
-        <p><strong>Working Hours:</strong> {{ workspace.workingHours }}</p>
-        <p><strong>Average Rating:</strong> {{ workspace.averageRating }}</p>
-    {% else %}
-        <h2>{% trans "Add New Workspace" %}</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="sign-in add-space-button">{% trans "Add Workspace" %}</button>
-        </form>
-    {% endif %}
+    <h2>{% trans "Add New Workspace" %}</h2>
+    <form method="post" enctype="multipart/form-data" id="workspace-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <label for="autocomplete">{% trans "Address" %}</label>
+            <input id="autocomplete" type="text" placeholder="Enter your address" onFocus="geolocate()">
+        </div>
+        <input type="hidden" id="id_latitude" name="latitude">
+        <input type="hidden" id="id_longitude" name="longitude">
+        <input type="hidden" id="id_address" name="address">
+        <button type="submit" class="sign-in add-space-button">{% trans "Add Workspace" %}</button>
+    </form>
 </section>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuQTrofOez0YlZgK1cMnGSOnAGFZQVKuU&libraries=places&callback=initAutocomplete" async defer></script>
+<script>
+    let autocomplete;
+    const componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name',
+        sublocality_level_1: 'long_name',
+        neighborhood: 'long_name'
+    };
 
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'),
+            {types: ['geocode']}
+        );
+
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        const place = autocomplete.getPlace();
+        
+        if (place.geometry && place.geometry.location) {
+            document.getElementById('id_latitude').value = place.geometry.location.lat();
+            document.getElementById('id_longitude').value = place.geometry.location.lng();
+        }
+
+        const address_components = place.address_components;
+        const address_dict = {};
+
+        for (const component of address_components) {
+            const addressType = component.types[0];
+            if (componentForm[addressType]) {
+                address_dict[addressType] = component[componentForm[addressType]];
+            }
+        }
+
+        // Preenche os campos ocultos no formulário
+        for (const key in address_dict) {
+            const element = document.getElementById('id_' + key);
+            if (element) {
+                element.value = address_dict[key];
+            }
+        }
+
+        // Logs para depuração
+        console.log("Address components:", address_dict);
+    }
+
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                const circle = new google.maps.Circle({
+                    center: geolocation,
+                    radius: position.coords.accuracy
+                });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
 {% include 'homepage/footer.html' %}
 {% endblock %}

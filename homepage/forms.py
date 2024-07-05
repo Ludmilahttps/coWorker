@@ -9,5 +9,5 @@ class TripForm(forms.ModelForm):
 class WorkspaceForm(forms.ModelForm):
     class Meta:
         model = Workspace
-        fields = ['name', 'description', 'country', 'state', 'city', 'neighborhood', 'street', 'number', 'postalCode', 'complement', 'workingHours', 'category']
-        exclude = ['owner', 'average_rating']
+        fields = ['name', 'description', 'workingHours', 'category', 'phone', 'website']
+        exclude = ['owner', 'averageRating', 'country', 'state', 'city', 'neighborhood', 'street', 'number', 'postalCode', 'complement', 'latitude', 'longitude', 'email']

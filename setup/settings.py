@@ -4,7 +4,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-d3h-q8sqqjhf6ukyubap$s^b##h%u6z9bn=#a@$y)$#c^6f!*_'
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
 
@@ -129,7 +129,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -149,4 +149,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 YOUR_GOOGLE_CLIENT_ID = '1077288063347-j2dsscin33kr2diofl4kghsdr3dfgqvl.apps.googleusercontent.com'
 YOUR_GOOGLE_CLIENT_SECRET = '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'
+GOOGLE_MAPS_API_KEY='AIzaSyDuQTrofOez0YlZgK1cMnGSOnAGFZQVKuU'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
