@@ -31,6 +31,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     registration_date = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)

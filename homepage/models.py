@@ -55,7 +55,14 @@ class Rating(models.Model):
     notes = models.ForeignKey(Notes, on_delete=models.CASCADE)
     comment = models.TextField(blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
+    useful_count = models.IntegerField(default=0)
 
+class RatingComment(models.Model):
+    rating = models.ForeignKey(Rating, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    comment = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+    
 class Event(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)

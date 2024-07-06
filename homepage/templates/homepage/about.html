@@ -50,35 +50,21 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;     /* Body text font */
-    background-color: #f5f5f5;             /* Off-white background (subtle texture) */
-    line-height: 1.6;                     /* Improved readability */
-    color: #707986;                       /* Dark gray for body text */
-}
-
-/* Typography */
-h1 {
-    font-family: 'Montserrat', sans-serif; /* Main heading font */
-    font-weight: 700;
-    color: #203354;                       /* Primary dark blue */
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-h2 {
-    font-family: 'Montserrat', sans-serif; /* Section heading font */
-    font-weight: 600;                    /* Slightly less bold than h1 */
-    color: #203354;                       /* Primary dark blue */
-    text-align: center;
-    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;   
+    background-color: #f5f5f5;
+    line-height: 1.6;
+    color: #707986;
 }
 
 p, li {
-    font-family: 'Lato', sans-serif;     /* Body text font */
+    font-family: 'Lato', sans-serif;
     line-height: 1.6;
 }
 
-/* Layout */
+h1, h2 {
+    text-align: center;
+}
+
 .container {
     max-width: 1200px; 
     margin: 0 auto;    
@@ -95,13 +81,12 @@ p, li {
     gap: 40px;
 }
 
-/* Cards */
 .about-card {
     background-color: white;
     padding: 40px;
-    border-radius: 10px; 
+    border-radius: 35px 0px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover effects */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .about-card:hover {
@@ -116,14 +101,14 @@ p, li {
     border-radius: 8px;
 }
 
-/* Additional Information */
 .additional-info {
     background-color: white;
     padding: 40px;
-    border-radius: 10px;
+    border-radius: 35px 0px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 60px;
     text-align: center;
+    margin-bottom: 60px;
 }
 .additional-info h2 {
     color: #203354; /* Primary dark blue */

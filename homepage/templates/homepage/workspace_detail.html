@@ -1,6 +1,7 @@
 {% extends 'homepage/header.html' %}
 {% load i18n %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}{{ workspace.name }}{% endblock %}
 
@@ -36,7 +37,7 @@
             </button>
         </div>
         <button class="btn btn-outline-primary like-button mt-3" data-workspace-id="{{ workspace.id }}">
-            {% if is_authenticated and liked %}
+            {% if user.is_authenticated and liked %}
                 <ion-icon name="heart" class="fas fa-heart liked"></ion-icon>
             {% else %}
                 <ion-icon name="heart-outline" class="far fa-heart"></ion-icon>
@@ -49,34 +50,82 @@
                 <h2 class="card-title">{% trans "Ratings and review" %}</h2>
                 <div class="card mt-3">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                            <h6 class="mb-0">{% trans "General" %}</h6>
+                        <li class="list-group-item">
                             <div class="star-rating">
-                                {% for i in 'xxxxx'|center:5 %}
-                                    <i class="fas fa-star {% if forloop.counter > notes.note_general %}empty{% endif %}"></i>
+                                {% for i in 0|make_list:5 %}
+                                    {% if i < notes.note_general %}
+                                        <ion-icon name="star" class="star"></ion-icon>
+                                    {% else %}
+                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
+                                    {% endif %}
                                 {% endfor %}
                                 <span class="text-secondary ml-2">({{ notes.note_general }} / 5)</span> 
                             </div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <li class="list-group-item">
                             <h6 class="mb-0">{% trans "Sockets" %}</h6>
-                            <span class="text-secondary">{{ notes.note_sockets }} / 5</span>
+                            <div class="star-rating">
+                                {% for i in 0|make_list:5 %}
+                                    {% if i < notes.note_sockets %}
+                                        <ion-icon name="star" class="star"></ion-icon>
+                                    {% else %}
+                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="text-secondary ml-2">({{ notes.note_sockets }} / 5)</span>
+                            </div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <li class="list-group-item">
                             <h6 class="mb-0">{% trans "Internet" %}</h6>
-                            <span class="text-secondary">{{ notes.note_internet }} / 5</span>
+                            <div class="star-rating">
+                                {% for i in 0|make_list:5 %}
+                                    {% if i < notes.note_internet %}
+                                        <ion-icon name="star" class="star"></ion-icon>
+                                    {% else %}
+                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="text-secondary ml-2">({{ notes.note_internet }} / 5)</span>
+                            </div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <li class="list-group-item">
                             <h6 class="mb-0">{% trans "Silence" %}</h6>
-                            <span class="text-secondary">{{ notes.note_silence }} / 5</span>
+                            <div class="star-rating">
+                                {% for i in 0|make_list:5 %}
+                                    {% if i < notes.note_silence %}
+                                        <ion-icon name="star" class="star"></ion-icon>
+                                    {% else %}
+                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="text-secondary ml-2">({{ notes.note_silence }} / 5)</span>
+                            </div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <li class="list-group-item">
                             <h6 class="mb-0">{% trans "Menu Price" %}</h6>
-                            <span class="text-secondary">{{ notes.note_menu_price }} / 5</span>
+                            <div class="star-rating">
+                                {% for i in 0|make_list:5 %}
+                                    {% if i < notes.note_menu_price %}
+                                        <ion-icon name="star" class="star"></ion-icon>
+                                    {% else %}
+                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="text-secondary ml-2">({{ notes.note_menu_price }} / 5)</span>
+                            </div>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <li class="list-group-item">
                             <h6 class="mb-0">{% trans "Daily Price" %}</h6>
-                            <span class="text-secondary">{{ notes.note_daily_price }} / 5</span>
+                            <div class="star-rating">
+                                {% for i in 0|make_list:5 %}
+                                    {% if i < notes.note_daily_price %}
+                                        <ion-icon name="star" class="star"></ion-icon>
+                                    {% else %}
+                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="text-secondary ml-2">({{ notes.note_daily_price }} / 5)</span>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -145,6 +194,75 @@
                         <p><ion-icon name="call"></ion-icon> {% trans "No phone number provided" %}</p>
                     {% endif %}
                 </div>
+        </div>
+    </div>
+    <div class="review-container">
+        <div class="margin">
+            <h2>{% trans "Reviews" %}</h2>
+            <div class="review">
+                <div class="geral-info">
+                    <p><strong>{% trans "Overall Rating" %}:</strong> {{ average_rating }} / 5</p>
+                    <p><strong>{% trans "Total Reviews" %}:</strong> {{ reviews|length }}</p>
+                    <ul class="star-counts">
+                        {% for i in "012345" %}
+                            {% for j in "012345" %}
+                                {% if j|stringformat:"j" <= star_counts|get_item:forloop.counter0|default:0 %}
+                                    <ion-icon name="star"></ion-icon>
+                                {% else %}
+                                    <ion-icon name="star-outline"></ion-icon>
+                                {% endif %}
+                            {% endfor %}
+                            <p><strong>{{ forloop.counter }} {% trans "Stars" %}:</strong> {{ star_counts|get_item:forloop.counter0|default:0 }}</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="reviews">
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex flex-row align-items-center">
+                                        <img src="{% static 'images/profile_picture.png' %}" alt="{% trans 'Profile Image' %}" class="rounded-circle avatar-lg img-thumbnail">
+                                        <div class="ms-3">
+                                            <h5 class="mb-1">{{ review.user.name }}</h5>
+                                            <p class="mb-1">{{ review.comment }}</p>
+                                            <div class="review-votes">
+                                                <ion-icon name="caret-up" class="upvote" data-review-id="{{ review.id }}"></ion-icon>
+                                                <span>{{ review.useful_count }}</span>
+                                                <ion-icon name="caret-down" class="downvote" data-review-id="{{ review.id }}"></ion-icon>
+                                            </div>
+                                            <div class="star-rating">
+                                                {% for i in 5|range_filter %}
+                                                    {% if i < review.notes.note_general %}
+                                                        <ion-icon name="star"></ion-icon>
+                                                    {% else %}
+                                                        <ion-icon name="star-outline"></ion-icon>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <span class="text-secondary ml-2">({{ review.notes.note_general }} / 5)</span> 
+                                            </div>
+                                            <div class="review-ratings">
+                                                <p>{% trans "General" %}: {{ review.notes.note_general }} / 5</p>
+                                                <p>{% trans "Sockets" %}: {{ review.notes.note_sockets }} / 5</p>
+                                                <p>{% trans "Internet" %}: {{ review.notes.note_internet }} / 5</p>
+                                                <p>{% trans "Silence" %}: {{ review.notes.note_silence }} / 5</p>
+                                                <p>{% trans "Menu Price" %}: {{ review.notes.note_menu_price }} / 5</p>
+                                                <p>{% trans "Daily Price" %}: {{ review.notes.note_daily_price }} / 5</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">{{ review.date|date:"d M Y" }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>{% trans "No reviews yet. Be the first to leave a review!" %}</p>
+                        <a href="{% url 'add_review' workspace.id %}" class="btn btn-primary mt-3">{% trans "Add a Review" %}</a>
+                    {% endif %}
+                </div>  
+            </div>
         </div>
     </div>
 </div>
@@ -225,6 +343,46 @@
             title: "{{ workspace.name }}"
         });
     }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const upvoteButtons = document.querySelectorAll('.upvote');
+        const downvoteButtons = document.querySelectorAll('.downvote');
+
+        upvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const reviewId = this.getAttribute('data-review-id');
+                voteReview(reviewId, 'upvote');
+            });
+        });
+
+        downvoteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const reviewId = this.getAttribute('data-review-id');
+                voteReview(reviewId, 'downvote');
+            });
+        });
+
+        function voteReview(reviewId, type) {
+            fetch(`/vote_review/${reviewId}/${type}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ review_id: reviewId, type: type })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
 </script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -407,131 +565,226 @@
         text-align: center;
     }
 
-    .text-secondary {
-        color: #6c757d;
-    }
-
     .text-muted {
         color: #6c757d !important;
     }
 
     body {
-    margin-top:20px;
-    background:#f8f8f8;
-}
+        margin-top:20px;
+        background:#f8f8f8;
+    }
 
-/* Main container for the profile content */
-.profile-content {
-    display: flex; /* Enable flexbox for easy column layout */
-}
+    /* Main container for the profile content */
+    .profile-content {
+        display: flex; /* Enable flexbox for easy column layout */
+    }
 
-/* Left column (Profile navigation) */
-.profile-nav {
-    width: 25%; /* Adjust width as needed */
-    margin-right: 20px; /* Add some spacing between columns */
-}
+    /* Left column (Profile navigation) */
+    .profile-nav {
+        width: 25%; /* Adjust width as needed */
+        margin-right: 20px; /* Add some spacing between columns */
+    }
 
-.panel {
-    background-color: #fff;
-    margin-bottom: 20px;
-}
+    .panel {
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
 
-.user-heading {
-    background: #f2f2f2;
-    text-align: center;
-    padding: 30px;
-}
+    .user-heading {
+        background: #f2f2f2;
+        text-align: center;
+        padding: 30px;
+    }
 
-.user-heading img {
-    width: 98px;
-    height: 98px;
-    margin: 0 auto;
-}
+    .user-heading img {
+        width: 98px;
+        height: 98px;
+        margin: 0 auto;
+    }
 
-.user-heading h1 {
-    font-size: 22px;
-    font-weight: 300;
-    margin-bottom: 5px;
-}
+    .user-heading h1 {
+        font-size: 22px;
+        font-weight: 300;
+        margin-bottom: 5px;
+    }
 
-.user-heading p {
-    font-size: 12px;
-}
+    .user-heading p {
+        font-size: 12px;
+    }
 
-.panel-body {
-    padding: 15px;
-}
+    .panel-body {
+        padding: 15px;
+    }
 
-.bio-graph-heading {
-    background: #f7f7f7;
-    padding: 10px;
-    font-style: italic;
-    text-align: center;
-    font-size: 12px;
-}
+    .bio-graph-heading {
+        background: #f7f7f7;
+        padding: 10px;
+        font-style: italic;
+        text-align: center;
+        font-size: 12px;
+    }
 
-.bio-graph-info {
-    padding: 40px 0;
-}
+    .bio-graph-info {
+        padding: 40px 0;
+    }
 
-.bio-graph-info h1 {
-    font-size: 15px;
-    font-weight: 300;
-    margin-bottom: 20px;
-}
+    .bio-graph-info h1 {
+        font-size: 15px;
+        font-weight: 300;
+        margin-bottom: 20px;
+    }
 
-.bio-row {
-    width: 50%;
-    float: left;
-    margin-bottom: 10px;
-    padding:0 15px;
-}
+    .bio-row {
+        width: 50%;
+        float: left;
+        margin-bottom: 10px;
+        padding:0 15px;
+    }
 
-.bio-row p span {
-    width: 100px;
-    display: inline-block;
-    font-weight: bold;
-}
+    .bio-row p span {
+        width: 100px;
+        display: inline-block;
+        font-weight: bold;
+    }
 
-.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    color: #fff;
-    background-color: #3498db;
-}
+    .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+        color: #fff;
+        background-color: #3498db;
+    }
 
-.profile-info {
-    width: 75%;
-}
+    .profile-info {
+        width: 75%;
+    }
 
-.workspace-detail-section {
-    font-family: 'Roboto', sans-serif;
-}
+    .workspace-detail-section {
+        font-family: 'Roboto', sans-serif;
+    }
 
-.ratings-card .list-group-item {
-    font-size: 14px;
-}
+    .list-group{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        flex-wrap: wrap;
+    }
 
-.ratings-card .list-group-item:first-child {
-    font-size: 18px;  
-}
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 15px;
+        h6 {
+            font-size: 18px;
+            padding: 0px;
+            margin: 0px 10px 0px 0px;
+            color: #203354;
+        }
+        .text-secondary {
+            color: #203354;
+            margin: 0px 0px 0px 10px;
+        }
+    }
 
-.star-rating {
-    display: inline-flex;
-}
+    .ratings-card .list-group-item:first-child {
+        align-items: center;
+        font-size: 26px;  
+    }
 
-.star-rating i {
-    color: gold;
-    margin-right: 3px;
-}
+    .star-rating {
+        display: flex;
+        align-items: center;
+        display: inline-flex;
+    }
 
-.star-rating i.empty {
-    color: lightgray;
-}
+    .ratings-card ul {
+        list-style-type: none; 
+        padding-left: 0;
+    }
+    
+    .ratings-card .card-title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    .ratings-card .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .ratings-card .list-group-item h6 {
+        margin-bottom: 0;
+    }
 
-.ratings-card ul {
-    list-style-type: none; 
-    padding-left: 0;
-}
+    .star-outline {
+        color:#203354 !important;
+        margin: 0px 2px;
+    }
 
+    .star {
+        color:#365d77 !important;
+        margin: 0px 2px;
+    }
+
+    .review-container {
+        width: 90%;
+        max-width: 1200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 20px;
+        border-radius: 35px 0px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 60px;
+        text-align: start;
+        margin-bottom: 60px;
+        background-color: blue;
+
+        .margin {
+            width: 90%;
+            height: 90%;
+            background-color: saddlebrown;
+        }
+
+        .review {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+            justify-content: center;
+            gap: 20px;
+            background-color: #365d77;
+
+            .geral-info {
+                width: 30%;
+                background-color: aqua;
+            }
+            .reviews {
+                width: 70%;
+                background-color: beige;
+
+                .star-rating {
+                    display: flex;
+                    align-items: center;
+                }
+                .star-rating ion-icon {
+                    margin-right: 5px;
+                    font-size: 20px;
+                }
+                .star-rating ion-icon.full {
+                    color: #ffc107;
+                }
+                .star-rating ion-icon.empty {
+                    color: #e4e5e9;
+                }
+                .avatar-lg {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+        }
+    }
 </style>
 
 {% include 'homepage/footer.html' %}

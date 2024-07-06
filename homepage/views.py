@@ -3,11 +3,12 @@ from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
-from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes
+from django.db.models import Avg, Count
+from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes, Rating, Event
 from accounts.models import Users
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .forms import TripForm, WorkspaceForm
+from .forms import TripForm, WorkspaceForm, ReviewForm
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -69,12 +70,14 @@ def get_context_data(request):
             'name': request.session.get('user_name'),
             'email': request.session.get('user_email'),
             'type': request.session.get('user_type'),
+            'phone_number': request.session.get('phone_number'),
             'is_authenticated': True
         }
     else:
         context['user'] = {
             'name': 'Guest',
             'email': 'guest@example.com',
+            'phone_number': _("Not available"),
             'is_authenticated': False
         }
 
@@ -255,29 +258,46 @@ def like_workspace(request, workspace_id):
 @handle_view_errors
 def workspace_detail_view(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
+    reviews = Rating.objects.filter(workspace=workspace)
+
+    if reviews.exists():
+        total_reviews = reviews.count()
+        overall_rating = reviews.aggregate(Avg('notes__note_general'))['notes__note_general__avg']
+        star_counts = {
+            i: reviews.filter(notes__note_general=i).count() for i in range(1, 6)
+        }
+    else:
+        total_reviews = 0
+        overall_rating = 0
+        star_counts = {i: 0 for i in range(1, 6)}
+
     try:
         notes = Notes.objects.get(workspace=workspace)
     except Notes.DoesNotExist:
         notes = {
-            'note_sockets': 0,
+            'note_sockets': 1,
             'note_internet': 0,
-            'note_silence': 0,
-            'note_menu_price': 0,
-            'note_daily_price': 0,
+            'note_silence': 2,
+            'note_menu_price': 3,
+            'note_daily_price': 5,
             'note_general': 4,
         }
 
     context = get_context_data(request)
     context.update({
         'workspace': workspace,
+        'reviews': reviews,
         'notes': notes,
+        'total_reviews': total_reviews,
+        'overall_rating': overall_rating,
+        'star_counts': star_counts,
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
     })
 
     if request.user.is_authenticated:
         try:
             user = Users.objects.get(email=request.session.get('user_email'))
-            liked = LikedWorkspaces.objects.filter(user=user.id, workspace=workspace_id).exists()
+            liked = LikedWorkspaces.objects.filter(user=user, workspace=workspace).exists()
             context.update({
                 'liked': liked
             })
@@ -287,6 +307,53 @@ def workspace_detail_view(request, workspace_id):
             })
     
     return render(request, 'homepage/workspace_detail.html', context)
+
+@login_required
+@handle_view_errors
+def add_review_view(request, workspace_id):
+    workspace = get_object_or_404(Workspace, id=workspace_id)
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            notes = Notes.objects.create(
+                note_general=form.cleaned_data['note_general'],
+                note_sockets=form.cleaned_data['note_sockets'],
+                note_internet=form.cleaned_data['note_internet'],
+                note_silence=form.cleaned_data['note_silence'],
+                note_menu_price=form.cleaned_data['note_menu_price'],
+                note_daily_price=form.cleaned_data['note_daily_price'],
+                workspace=workspace
+            )
+            review = form.save(commit=False)
+            review.user = request.user
+            review.workspace = workspace
+            review.notes = notes
+            review.save()
+            return redirect('workspace_detail', workspace_id=workspace.id)
+    else:
+        form = ReviewForm()
+
+    context = {
+        'form': form,
+        'workspace': workspace
+    }
+    return render(request, 'homepage/add_review.html', context)
+
+@login_required
+@handle_view_errors
+def vote_review(request, review_id, vote_type):
+    review = get_object_or_404(Rating, id=review_id)
+
+    if vote_type == 'upvote':
+        review.useful_count += 1
+    elif vote_type == 'downvote':
+        review.useful_count -= 1
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid vote type'}, status=400)
+
+    review.save()
+    return JsonResponse({'success': True, 'new_count': review.useful_count})
 
 @handle_view_errors
 def get_coordinates(address, api_key):

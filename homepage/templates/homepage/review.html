@@ -1,5 +1,7 @@
 {% extends 'homepage/header.html' %}
 {% load i18n %}
+{% load static %}
+
 {% block title %}{% trans "Favorite" %}{% endblock %}
 
 {% block content %}
@@ -7,15 +9,20 @@
     <h1>{% trans "Favorite Page" %}</h1>
 
     {% if user.is_authenticated %}
-        <div class="favorites-container">
+        <div class="workspaces-container">
             {% if favorite_workspaces %}
                 {% for workspace in favorite_workspaces %}
                     <div class="workspace-card">
                         {% if workspace.photos.exists %}
-                        <img src="{{ workspace.photos.first.file }}" alt="{{ workspace.name }}" class="workspace-image" />
+                            <img src="{{ workspace.photos.first.file.url }}" alt="{{ workspace.name }}" class="workspace-image" />
+                        {% else %}
+                            <img src="{% static 'images/no_images.svg' %}" alt="{{ workspace.name }}" class="workspace-image" />
                         {% endif %}
-                        <h3>{{ workspace.name }}</h3>
-                        <p>{{ workspace.category.name }}</p>
+                        <div class="workspace-info">
+                            <h3>{{ workspace.name }}</h3>
+                            <p class="workspace-name">{{ workspace.category.name }}</p>
+                        </div>
+                        <p class="workspace-location">{{ workspace.city }}, {{ workspace.state }}</p>
                     </div>
                 {% endfor %}
             {% else %}

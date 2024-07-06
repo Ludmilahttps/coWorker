@@ -1,0 +1,45 @@
+{% extends 'homepage/header.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Add Review" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% trans "Add Review for" %} {{ workspace.name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="note_general">{% trans "General Rating" %}</label>
+            {{ form.note_general }}
+        </div>
+        <div class="form-group">
+            <label for="note_sockets">{% trans "Sockets Rating" %}</label>
+            {{ form.note_sockets }}
+        </div>
+        <div class="form-group">
+            <label for="note_internet">{% trans "Internet Rating" %}</label>
+            {{ form.note_internet }}
+        </div>
+        <div class="form-group">
+            <label for="note_silence">{% trans "Silence Rating" %}</label>
+            {{ form.note_silence }}
+        </div>
+        <div class="form-group">
+            <label for="note_menu_price">{% trans "Menu Price Rating" %}</label>
+            {{ form.note_menu_price }}
+        </div>
+        <div class="form-group">
+            <label for="note_daily_price">{% trans "Daily Price Rating" %}</label>
+            {{ form.note_daily_price }}
+        </div>
+        <div class="form-group">
+            <label for="comment">{% trans "Comment" %}</label>
+            {{ form.comment }}
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Submit Review" %}</button>
+    </form>
+</div>
+
+{% include 'homepage/footer.html' %}
+{% endblock %}

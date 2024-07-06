@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, UserProfileForm
 from .models import Users
 from homepage.views import get_context_data, discover_view
 from django.contrib.auth.forms import AuthenticationForm
@@ -159,3 +159,19 @@ def profile_view(request):
         'top_cities': [(city['workspace__city'], city['count']) for city in top_cities]
     })
     return render(request, 'accounts/profile.html', context)
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=user)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/edit_profile.html', context)

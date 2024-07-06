@@ -22,5 +22,10 @@ class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = Users
+        fields = ['name', 'email', 'phone_number']
+
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(label='Email', max_length=254)

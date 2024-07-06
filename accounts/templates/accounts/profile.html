@@ -61,29 +61,21 @@
                     <table class="table table-borderless mb-0">
                         <tbody>
                             <tr>
-                                <th scope="row">Full Name</th>
+                                <th scope="row"><ion-icon name="person"></ion-icon>{% trans "Full Name" %}</th>
                                 <td>{{ user.name }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Email</th>
+                                <th scope="row"><ion-icon name="mail-open"></ion-icon>{% trans "Email" %}</th>
                                 <td>{{ user.email }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Phone</th>
-                                <td>(239) 816-9029</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Mobile</th>
-                                <td>(320) 380-4539</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Address</th>
-                                <td>Bay Area, San Francisco, CA</td>
+                                <th scope="row"><ion-icon name="call"></ion-icon>{% trans "Phone" %}</th>
+                                <td>{{ user.phone_number|default:_("Not available") }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <button type="button" class="btn btn-primary mt-3">{% trans "Edit" %}</button>
+                <a href="{% url 'edit_profile' %}">{% trans "Edit" %}</a>            
             </div>
 
             <div class="card-box">
@@ -107,12 +99,33 @@
     </div>
 </section>
 
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
 <style>
 .profile-section {
     display: flex;
     justify-content: center;
     padding: 20px;
     font-family: 'Roboto', sans-serif;
+}
+
+tbody {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+tr {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: row;
+}
+
+td {
+    margin-left: 20px;
 }
 
 .profile-container {
