@@ -7,10 +7,10 @@
 {% block content %}
 <section class="discover-section">
     <div class="search-bar">
-        <div class="search-input-container">
-            <input type="text" class="search-input" placeholder="{% trans 'Search...' %}">
+        <div class="search-input-container position-relative">
+            <input type="text" class="search-input" placeholder="{% trans 'You can search by: Name, Description, City, State, Category' %}" id="search-input">
             <div class="input-group-append">
-                <button class="btn btn-outline-warning btn-lg" type="button"><ion-icon class="search" name="search"></ion-icon></i></button>
+                <button class="btn btn-outline-warning btn-lg" type="button"><ion-icon class="search" name="search"></ion-icon></button>
             </div>
         </div>
         <button class="add-space-button" onclick="location.href='{% url 'add_workspace' %}'">
@@ -63,7 +63,7 @@
     justify-content: center;
     align-items: center;
 
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 30px 20px;
 }

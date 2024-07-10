@@ -3,8 +3,8 @@ from django.utils.translation import activate, get_language, get_language_info
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
-from django.db.models import Avg, Count
-from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes, Rating, Event
+from django.db.models import Avg, Count, Q
+from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes, Rating, Event, ReviewVote
 from accounts.models import Users
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -13,6 +13,7 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 import requests
+from django.views.decorators.csrf import csrf_exempt
 from geopy.geocoders import GoogleV3
 from django.contrib import messages
 import setup.settings as GOOGLE_MAPS_API_KEY
@@ -172,13 +173,24 @@ def new_trip(request):
 
 @handle_view_errors
 def discover_view(request):
+    query = request.GET.get('q')
     categories = Category.objects.all()
     workspaces = Workspace.objects.all()
+
+    if query:
+        workspaces = workspaces.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(city__icontains=query) |
+            Q(state__icontains=query) |
+            Q(category__name__icontains=query)
+        )
 
     context = get_context_data(request)
     context.update({
         'categories': categories,
         'workspaces': workspaces,
+        'query': query
     })
 
     return render(request, 'homepage/discover.html', context)
@@ -256,6 +268,7 @@ def like_workspace(request, workspace_id):
         return JsonResponse({'success': False, 'error': 'User not found'}, status=404)
     
 @handle_view_errors
+@handle_view_errors
 def workspace_detail_view(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
     reviews = Rating.objects.filter(workspace=workspace)
@@ -264,12 +277,14 @@ def workspace_detail_view(request, workspace_id):
         total_reviews = reviews.count()
         overall_rating = reviews.aggregate(Avg('notes__note_general'))['notes__note_general__avg']
         star_counts = {
-            i: reviews.filter(notes__note_general=i).count() for i in range(1, 6)
+            str(i): reviews.filter(notes__note_general=i).count() for i in range(1, 6)
         }
+        star_counts_list = [(i, star_counts[str(i)]) for i in range(1, 6)]
     else:
         total_reviews = 0
         overall_rating = 0
-        star_counts = {i: 0 for i in range(1, 6)}
+        star_counts = {str(i): 0 for i in range(1, 6)}
+        star_counts_list = [(i, 0) for i in range(1, 6)]
 
     try:
         notes = Notes.objects.get(workspace=workspace)
@@ -283,6 +298,11 @@ def workspace_detail_view(request, workspace_id):
             'note_general': 4,
         }
 
+    user_votes = {}
+    if request.user.is_authenticated:
+        user = request.user
+        user_votes = {review.id: review.votes.filter(user=user).first() for review in reviews}
+
     context = get_context_data(request)
     context.update({
         'workspace': workspace,
@@ -290,22 +310,19 @@ def workspace_detail_view(request, workspace_id):
         'notes': notes,
         'total_reviews': total_reviews,
         'overall_rating': overall_rating,
-        'star_counts': star_counts,
+        'star_counts_list': star_counts_list,
+        'user_votes': user_votes,
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
     })
 
     if request.user.is_authenticated:
         try:
-            user = Users.objects.get(email=request.session.get('user_email'))
+            user = get_object_or_404(Users, email=request.user.email)
             liked = LikedWorkspaces.objects.filter(user=user, workspace=workspace).exists()
-            context.update({
-                'liked': liked
-            })
+            context.update({'liked': liked})
         except Users.DoesNotExist:
-            context.update({
-                'liked': False
-            })
-    
+            context.update({'liked': False})
+
     return render(request, 'homepage/workspace_detail.html', context)
 
 @login_required
@@ -343,17 +360,35 @@ def add_review_view(request, workspace_id):
 @login_required
 @handle_view_errors
 def vote_review(request, review_id, vote_type):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'User not authenticated'}, status=401)
+
     review = get_object_or_404(Rating, id=review_id)
+    existing_vote = ReviewVote.objects.filter(user=request.user, review=review).first()
 
-    if vote_type == 'upvote':
-        review.useful_count += 1
-    elif vote_type == 'downvote':
-        review.useful_count -= 1
+    if existing_vote:
+        if existing_vote.vote_type == vote_type:
+            return JsonResponse({'success': False, 'error': 'Already voted'}, status=400)
+        else:
+            if vote_type == 'upvote':
+                review.useful_count += 1
+                if existing_vote.vote_type == 'downvote':
+                    review.useful_count += 1
+            else:
+                review.useful_count -= 1
+                if existing_vote.vote_type == 'upvote':
+                    review.useful_count -= 1
+            existing_vote.vote_type = vote_type
+            existing_vote.save()
     else:
-        return JsonResponse({'success': False, 'error': 'Invalid vote type'}, status=400)
-
+        ReviewVote.objects.create(user=request.user, review=review, vote_type=vote_type)
+        if vote_type == 'upvote':
+            review.useful_count += 1
+        else:
+            review.useful_count -= 1
     review.save()
-    return JsonResponse({'success': True, 'new_count': review.useful_count})
+
+    return JsonResponse({'success': True, 'useful_count': review.useful_count})
 
 @handle_view_errors
 def get_coordinates(address, api_key):

@@ -57,6 +57,15 @@ class Rating(models.Model):
     date = models.DateTimeField(default=timezone.now)
     useful_count = models.IntegerField(default=0)
 
+class ReviewVote(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    review = models.ForeignKey(Rating, related_name='votes', on_delete=models.CASCADE)
+    vote_type = models.CharField(max_length=10, choices=[('upvote', 'Upvote'), ('downvote', 'Downvote')])
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'review')
+
 class RatingComment(models.Model):
     rating = models.ForeignKey(Rating, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)

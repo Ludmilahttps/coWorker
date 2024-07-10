@@ -16,7 +16,7 @@
             </button>
             <div class="carousel-wrapper">
                 <div class="carousel-inner">
-                    {% if workspace.photos.exists %}
+                    {% if workspace.photos.all %}
                         {% for photo in workspace.photos.all %}
                         <div class="carousel-item">
                             <img src="{{ photo.file.url }}" alt="{{ workspace.name }}" class="carousel-img">
@@ -201,21 +201,17 @@
             <h2>{% trans "Reviews" %}</h2>
             <div class="review">
                 <div class="geral-info">
-                    <p><strong>{% trans "Overall Rating" %}:</strong> {{ average_rating }} / 5</p>
-                    <p><strong>{% trans "Total Reviews" %}:</strong> {{ reviews|length }}</p>
+                    <p><strong>{% trans "Overall Rating" %}:</strong> {{ overall_rating }} / 5</p>
+                    <p><strong>{% trans "Total Reviews" %}:</strong> {{ total_reviews }}</p>
                     <ul class="star-counts">
-                        {% for i in "012345" %}
-                            {% for j in "012345" %}
-                                {% if j|stringformat:"j" <= star_counts|get_item:forloop.counter0|default:0 %}
-                                    <ion-icon name="star"></ion-icon>
-                                {% else %}
-                                    <ion-icon name="star-outline"></ion-icon>
-                                {% endif %}
-                            {% endfor %}
-                            <p><strong>{{ forloop.counter }} {% trans "Stars" %}:</strong> {{ star_counts|get_item:forloop.counter0|default:0 }}</p>
+                        {% for star, count in star_counts_list %}
+                            <li>
+                                <p><strong>{{ star }} {% trans "Stars" %}:</strong> {{ count }}</p>
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
+                
                 <div class="reviews">
                     {% if reviews %}
                         {% for review in reviews %}
@@ -228,10 +224,10 @@
                                             <h5 class="mb-1">{{ review.user.name }}</h5>
                                             <p class="mb-1">{{ review.comment }}</p>
                                             <div class="review-votes">
-                                                <ion-icon name="caret-up" class="upvote" data-review-id="{{ review.id }}"></ion-icon>
+                                                <ion-icon name="caret-up" class="upvote" data-review-id="{{ review.id }}" data-vote-type="upvote" {% if user_votes|get_item:review.id and user_votes|get_item:review.id.vote_type == 'upvote' %}disabled{% endif %}></ion-icon>
                                                 <span>{{ review.useful_count }}</span>
-                                                <ion-icon name="caret-down" class="downvote" data-review-id="{{ review.id }}"></ion-icon>
-                                            </div>
+                                                <ion-icon name="caret-down" class="downvote" data-review-id="{{ review.id }}" data-vote-type="downvote" {% if user_votes|get_item:review.id and user_votes|get_item:review.id.vote_type == 'downvote' %}disabled{% endif %}></ion-icon>
+                                            </div>                                                                                      
                                             <div class="star-rating">
                                                 {% for i in 5|range_filter %}
                                                     {% if i < review.notes.note_general %}
@@ -346,43 +342,56 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const upvoteButtons = document.querySelectorAll('.upvote');
-        const downvoteButtons = document.querySelectorAll('.downvote');
+    const upvoteButtons = document.querySelectorAll('.upvote');
+    const downvoteButtons = document.querySelectorAll('.downvote');
 
-        upvoteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const reviewId = this.getAttribute('data-review-id');
-                voteReview(reviewId, 'upvote');
-            });
+    upvoteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const reviewId = this.getAttribute('data-review-id');
+            voteReview(reviewId, 'upvote', this);
         });
-
-        downvoteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const reviewId = this.getAttribute('data-review-id');
-                voteReview(reviewId, 'downvote');
-            });
-        });
-
-        function voteReview(reviewId, type) {
-            fetch(`/vote_review/${reviewId}/${type}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ review_id: reviewId, type: type })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.error);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
     });
+
+    downvoteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const reviewId = this.getAttribute('data-review-id');
+            voteReview(reviewId, 'downvote', this);
+        });
+    });
+
+    function voteReview(reviewId, type, button) {
+        fetch(`/vote_review/${reviewId}/${type}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ review_id: reviewId, type: type })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const upvoteButton = button.closest('.review-votes').querySelector('.upvote');
+                const downvoteButton = button.closest('.review-votes').querySelector('.downvote');
+                const usefulCountSpan = button.closest('.review-votes').querySelector('span');
+
+                if (type === 'upvote') {
+                    upvoteButton.setAttribute('disabled', 'true');
+                    downvoteButton.removeAttribute('disabled');
+                } else {
+                    downvoteButton.setAttribute('disabled', 'true');
+                    upvoteButton.removeAttribute('disabled');
+                }
+
+                usefulCountSpan.textContent = data.useful_count;
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+
 </script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -759,6 +768,20 @@
             .geral-info {
                 width: 30%;
                 background-color: aqua;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                justify-content: start;
+
+
+                .star-counts {
+                    list-style-type: none;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+                    justify-content: start;
+                    background-color: chartreuse;
+                }
             }
             .reviews {
                 width: 70%;

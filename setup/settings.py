@@ -116,7 +116,7 @@ LOGGING = {
 }
 
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'pt-br'
 LANGUAGES = [
     ('en', _('English')),
     ('pt', _('Portuguese')),
