@@ -17,6 +17,8 @@ from django.views.decorators.csrf import csrf_exempt
 from geopy.geocoders import GoogleV3
 from django.contrib import messages
 import setup.settings as GOOGLE_MAPS_API_KEY
+from django.db import models
+
 
 def get_context_data(request):
     ip_address = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -325,6 +327,8 @@ def workspace_detail_view(request, workspace_id):
         'overall_rating': overall_rating,
         'star_counts_list': star_counts_list,
         'user_votes': user_votes,
+        'latitude': workspace.latitude,
+        'longitude': workspace.longitude,
         'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
     })
 

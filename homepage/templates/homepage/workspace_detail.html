@@ -271,6 +271,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        initMap();
         const likeButton = document.querySelector('.like-button');
         const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -328,23 +329,17 @@
         nextBtn.addEventListener('click', function() {
             carouselInner.scrollBy({ left: carouselInner.clientWidth, behavior: 'smooth' });
         });
-
-        initMap();
     });
 </script>
 <script>
-    function initMap() {
-        const location = { lat: parseFloat("{{ workspace.latitude }}"), lng: parseFloat("{{ workspace.longitude }}") };
-        const map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 15,
-            center: location
-        });
-        const marker = new google.maps.Marker({
-            position: location,
-            map: map,
-            title: "{{ workspace.name }}"
-        });
-    }
+   function initMap() {
+    var mapOptions = {
+        center: new google.maps.LatLng(-34.397, 150.644),
+        zoom: 8
+    };
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+}
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -401,7 +396,9 @@
 </script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuQTrofOez0YlZgK1cMnGSOnAGFZQVKuU&callback=initMap&libraries=places"></script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuQTrofOez0YlZgK1cMnGSOnAGFZQVKuU&callback=initMap">
+</script>
 
 <style>
     .container {
