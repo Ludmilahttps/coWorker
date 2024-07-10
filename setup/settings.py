@@ -31,7 +31,7 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-AUTH_USER_MODEL = 'accounts.Users' 
+AUTH_USER_MODEL = 'accounts.users' 
 
 LOGIN_REDIRECT_URL = '/'
 

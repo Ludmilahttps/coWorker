@@ -252,7 +252,7 @@ def like_workspace(request, workspace_id):
     print(f"Workspace found: {workspace.name}")
     
     try:
-        user = Users.objects.get(email=request.session.get('user_email'))  # Encontra a instância correta do usuário
+        user = Users.objects.get(email=request.session.get('user_email'))
         liked_workspace, created = LikedWorkspaces.objects.get_or_create(user=user, workspace=workspace)
 
         if not created:
@@ -276,6 +276,7 @@ def workspace_detail_view(request, workspace_id):
     if reviews.exists():
         total_reviews = reviews.count()
         overall_rating = reviews.aggregate(Avg('notes__note_general'))['notes__note_general__avg']
+        overall_rating = round(overall_rating, 1) if overall_rating is not None else 0
         star_counts = {
             str(i): reviews.filter(notes__note_general=i).count() for i in range(1, 6)
         }
@@ -289,11 +290,11 @@ def workspace_detail_view(request, workspace_id):
             note_daily_price_avg=Avg('notes__note_daily_price')
         )
         notes = {
-            'note_sockets': notes_aggregate['note_sockets_avg'],
-            'note_internet': notes_aggregate['note_internet_avg'],
-            'note_silence': notes_aggregate['note_silence_avg'],
-            'note_menu_price': notes_aggregate['note_menu_price_avg'],
-            'note_daily_price': notes_aggregate['note_daily_price_avg'],
+            'note_sockets': round(notes_aggregate['note_sockets_avg'], 1) if notes_aggregate['note_sockets_avg'] is not None else 0,
+            'note_internet': round(notes_aggregate['note_internet_avg'], 1) if notes_aggregate['note_internet_avg'] is not None else 0,
+            'note_silence': round(notes_aggregate['note_silence_avg'], 1) if notes_aggregate['note_silence_avg'] is not None else 0,
+            'note_menu_price': round(notes_aggregate['note_menu_price_avg'], 1) if notes_aggregate['note_menu_price_avg'] is not None else 0,
+            'note_daily_price': round(notes_aggregate['note_daily_price_avg'], 1) if notes_aggregate['note_daily_price_avg'] is not None else 0,
             'note_general': overall_rating
         }
     else:
@@ -336,10 +337,12 @@ def workspace_detail_view(request, workspace_id):
             context.update({'liked': False})
 
     return render(request, 'homepage/workspace_detail.html', context)
+
 @login_required
 @handle_view_errors
 def add_review_view(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
+    user = Users.objects.get(email=request.session.get('user_email'))
 
     if request.method == 'POST':
         form = ReviewForm(request.POST)
@@ -354,7 +357,7 @@ def add_review_view(request, workspace_id):
                 note_daily_price=form.cleaned_data['note_daily_price']
             )
             review = form.save(commit=False)
-            review.user = request.user
+            review.user = user
             review.workspace = workspace
             review.notes = notes
             review.save()
@@ -365,7 +368,7 @@ def add_review_view(request, workspace_id):
                         review=review,
                         file=form.cleaned_data['file'],
                         workspace=workspace,
-                        user=request.user
+                        user=user
                     )
             return redirect('workspace_detail', workspace_id=workspace.id)
     else:
