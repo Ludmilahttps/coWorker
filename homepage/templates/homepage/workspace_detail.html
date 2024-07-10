@@ -219,9 +219,14 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex flex-row align-items-center">
-                                        <img src="{% static 'images/profile_picture.png' %}" alt="{% trans 'Profile Image' %}" class="rounded-circle avatar-lg img-thumbnail">
                                         <div class="ms-3">
-                                            <h5 class="mb-1">{{ review.user.name }}</h5>
+                                            <div class="title-review">
+                                                <div class="title">
+                                                    <img src="{% static 'images/profile_picture.png' %}" alt="{% trans 'Profile Image' %}" class="rounded-circle avatar-lg img-thumbnail">
+                                                    <h3 class="mb-1">{{ review.user.name }}</h3>
+                                                </div>
+                                                <small class="text-muted">{{ review.date|date:"d M Y" }}</small>
+                                            </div>
                                             <p class="mb-1">{{ review.comment }}</p>
                                             <div class="review-votes">
                                                 <ion-icon name="caret-up" class="upvote" data-review-id="{{ review.id }}" data-vote-type="upvote" {% if user_votes|get_item:review.id and user_votes|get_item:review.id.vote_type == 'upvote' %}disabled{% endif %}></ion-icon>
@@ -231,15 +236,14 @@
                                             <div class="star-rating">
                                                 {% for i in 5|range_filter %}
                                                     {% if i < review.notes.note_general %}
-                                                        <ion-icon name="star"></ion-icon>
+                                                        <ion-icon name="star" class="star"></ion-icon>
                                                     {% else %}
-                                                        <ion-icon name="star-outline"></ion-icon>
+                                                        <ion-icon name="star-outline" class="star-outline"></ion-icon>
                                                     {% endif %}
                                                 {% endfor %}
                                                 <span class="text-secondary ml-2">({{ review.notes.note_general }} / 5)</span> 
                                             </div>
                                             <div class="review-ratings">
-                                                <p>{% trans "General" %}: {{ review.notes.note_general }} / 5</p>
                                                 <p>{% trans "Sockets" %}: {{ review.notes.note_sockets }} / 5</p>
                                                 <p>{% trans "Internet" %}: {{ review.notes.note_internet }} / 5</p>
                                                 <p>{% trans "Silence" %}: {{ review.notes.note_silence }} / 5</p>
@@ -248,7 +252,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <small class="text-muted">{{ review.date|date:"d M Y" }}</small>
                                 </div>
                             </div>
                         </div>
@@ -748,12 +751,10 @@
         margin-top: 60px;
         text-align: start;
         margin-bottom: 60px;
-        background-color: blue;
 
         .margin {
             width: 90%;
             height: 90%;
-            background-color: saddlebrown;
         }
 
         .review {
@@ -763,7 +764,7 @@
             align-items: start;
             justify-content: center;
             gap: 20px;
-            background-color: #365d77;
+            padding-bottom: 20px;
 
             .geral-info {
                 width: 30%;
@@ -785,25 +786,49 @@
             }
             .reviews {
                 width: 70%;
-                background-color: beige;
+                border-radius: 35px 0px;
+                margin: 10px;
+                padding: 10px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 
+                .title-review {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: start;
+                    align-items: center;
+
+                    .title {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: start;
+                        align-items: center;
+                    }
+                    .avatar-lg {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 100%;
+                        margin: 10px;
+                    }
+                }
+                .review-votes {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: end;
+                    align-items: center;
+                    gap: 10px;
+                }
                 .star-rating {
                     display: flex;
                     align-items: center;
+                    justify-content: center;
+                    font-size: 22px;
+                    color: #365d77;
                 }
                 .star-rating ion-icon {
                     margin-right: 5px;
                     font-size: 20px;
-                }
-                .star-rating ion-icon.full {
-                    color: #ffc107;
-                }
-                .star-rating ion-icon.empty {
-                    color: #e4e5e9;
-                }
-                .avatar-lg {
-                    width: 50px;
-                    height: 50px;
                 }
             }
         }

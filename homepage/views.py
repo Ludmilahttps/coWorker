@@ -271,7 +271,7 @@ def like_workspace(request, workspace_id):
 @handle_view_errors
 def workspace_detail_view(request, workspace_id):
     workspace = get_object_or_404(Workspace, id=workspace_id)
-    reviews = Rating.objects.filter(workspace=workspace)
+    reviews = Rating.objects.filter(workspace=workspace).order_by('-useful_count')
 
     if reviews.exists():
         total_reviews = reviews.count()
@@ -290,12 +290,12 @@ def workspace_detail_view(request, workspace_id):
         notes = Notes.objects.get(workspace=workspace)
     except Notes.DoesNotExist:
         notes = {
-            'note_sockets': 1,
+            'note_sockets': 0,
             'note_internet': 0,
-            'note_silence': 2,
-            'note_menu_price': 3,
-            'note_daily_price': 5,
-            'note_general': 4,
+            'note_silence': 0,
+            'note_menu_price': 0,
+            'note_daily_price': 0,
+            'note_general': 0,
         }
 
     user_votes = {}
@@ -347,6 +347,9 @@ def add_review_view(request, workspace_id):
             review.workspace = workspace
             review.notes = notes
             review.save()
+            
+            update_workspace_ratings(workspace)
+
             return redirect('workspace_detail', workspace_id=workspace.id)
     else:
         form = ReviewForm()
@@ -404,3 +407,35 @@ def get_coordinates(address, api_key):
             location = data['results'][0]['geometry']['location']
             return location['lat'], location['lng']
     return None, None
+
+@handle_view_errors
+def update_workspace_ratings(workspace):
+    reviews = Rating.objects.filter(workspace=workspace)
+    if reviews.exists():
+        notes_aggregate = reviews.aggregate(
+            note_general_avg=Avg('notes__note_general'),
+            note_sockets_avg=Avg('notes__note_sockets'),
+            note_internet_avg=Avg('notes__note_internet'),
+            note_silence_avg=Avg('notes__note_silence'),
+            note_menu_price_avg=Avg('notes__note_menu_price'),
+            note_daily_price_avg=Avg('notes__note_daily_price')
+        )
+        notes = Notes.objects.filter(workspace=workspace).first()
+        if notes:
+            notes.note_general = notes_aggregate['note_general_avg']
+            notes.note_sockets = notes_aggregate['note_sockets_avg']
+            notes.note_internet = notes_aggregate['note_internet_avg']
+            notes.note_silence = notes_aggregate['note_silence_avg']
+            notes.note_menu_price = notes_aggregate['note_menu_price_avg']
+            notes.note_daily_price = notes_aggregate['note_daily_price_avg']
+            notes.save()
+        else:
+            Notes.objects.create(
+                workspace=workspace,
+                note_general=notes_aggregate['note_general_avg'],
+                note_sockets=notes_aggregate['note_sockets_avg'],
+                note_internet=notes_aggregate['note_internet_avg'],
+                note_silence=notes_aggregate['note_silence_avg'],
+                note_menu_price=notes_aggregate['note_menu_price_avg'],
+                note_daily_price=notes_aggregate['note_daily_price_avg']
+            )
