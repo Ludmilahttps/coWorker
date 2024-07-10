@@ -4,11 +4,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from datetime import datetime
 from django.db.models import Avg, Count, Q
-from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes, Rating, Event, ReviewVote
+from .models import Trip, Category, Workspace, WorkspacePhoto, LikedWorkspaces, Notes, Rating, ReviewVote
 from accounts.models import Users
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .forms import TripForm, WorkspaceForm, ReviewForm
+from .forms import TripForm, WorkspaceForm, ReviewForm, ReviewPhotoFormSet
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -280,22 +280,34 @@ def workspace_detail_view(request, workspace_id):
             str(i): reviews.filter(notes__note_general=i).count() for i in range(1, 6)
         }
         star_counts_list = [(i, star_counts[str(i)]) for i in range(1, 6)]
+        
+        notes_aggregate = reviews.aggregate(
+            note_sockets_avg=Avg('notes__note_sockets'),
+            note_internet_avg=Avg('notes__note_internet'),
+            note_silence_avg=Avg('notes__note_silence'),
+            note_menu_price_avg=Avg('notes__note_menu_price'),
+            note_daily_price_avg=Avg('notes__note_daily_price')
+        )
+        notes = {
+            'note_sockets': notes_aggregate['note_sockets_avg'],
+            'note_internet': notes_aggregate['note_internet_avg'],
+            'note_silence': notes_aggregate['note_silence_avg'],
+            'note_menu_price': notes_aggregate['note_menu_price_avg'],
+            'note_daily_price': notes_aggregate['note_daily_price_avg'],
+            'note_general': overall_rating
+        }
     else:
         total_reviews = 0
         overall_rating = 0
         star_counts = {str(i): 0 for i in range(1, 6)}
         star_counts_list = [(i, 0) for i in range(1, 6)]
-
-    try:
-        notes = Notes.objects.get(workspace=workspace)
-    except Notes.DoesNotExist:
         notes = {
             'note_sockets': 0,
             'note_internet': 0,
             'note_silence': 0,
             'note_menu_price': 0,
             'note_daily_price': 0,
-            'note_general': 0,
+            'note_general': 0
         }
 
     user_votes = {}
@@ -324,7 +336,6 @@ def workspace_detail_view(request, workspace_id):
             context.update({'liked': False})
 
     return render(request, 'homepage/workspace_detail.html', context)
-
 @login_required
 @handle_view_errors
 def add_review_view(request, workspace_id):
@@ -332,32 +343,41 @@ def add_review_view(request, workspace_id):
 
     if request.method == 'POST':
         form = ReviewForm(request.POST)
-        if form.is_valid():
+        formset = ReviewPhotoFormSet(request.POST, request.FILES)
+        if form.is_valid() and formset.is_valid():
             notes = Notes.objects.create(
                 note_general=form.cleaned_data['note_general'],
                 note_sockets=form.cleaned_data['note_sockets'],
                 note_internet=form.cleaned_data['note_internet'],
                 note_silence=form.cleaned_data['note_silence'],
                 note_menu_price=form.cleaned_data['note_menu_price'],
-                note_daily_price=form.cleaned_data['note_daily_price'],
-                workspace=workspace
+                note_daily_price=form.cleaned_data['note_daily_price']
             )
             review = form.save(commit=False)
             review.user = request.user
             review.workspace = workspace
             review.notes = notes
             review.save()
-            
-            update_workspace_ratings(workspace)
 
+            for form in formset:
+                if form.cleaned_data.get('file'):
+                    WorkspacePhoto.objects.create(
+                        review=review,
+                        file=form.cleaned_data['file'],
+                        workspace=workspace,
+                        user=request.user
+                    )
             return redirect('workspace_detail', workspace_id=workspace.id)
     else:
         form = ReviewForm()
+        formset = ReviewPhotoFormSet()
 
-    context = {
+    context = get_context_data(request)
+    context.update({
         'form': form,
+        'formset': formset,
         'workspace': workspace
-    }
+    })
     return render(request, 'homepage/add_review.html', context)
 
 @login_required
@@ -407,35 +427,3 @@ def get_coordinates(address, api_key):
             location = data['results'][0]['geometry']['location']
             return location['lat'], location['lng']
     return None, None
-
-@handle_view_errors
-def update_workspace_ratings(workspace):
-    reviews = Rating.objects.filter(workspace=workspace)
-    if reviews.exists():
-        notes_aggregate = reviews.aggregate(
-            note_general_avg=Avg('notes__note_general'),
-            note_sockets_avg=Avg('notes__note_sockets'),
-            note_internet_avg=Avg('notes__note_internet'),
-            note_silence_avg=Avg('notes__note_silence'),
-            note_menu_price_avg=Avg('notes__note_menu_price'),
-            note_daily_price_avg=Avg('notes__note_daily_price')
-        )
-        notes = Notes.objects.filter(workspace=workspace).first()
-        if notes:
-            notes.note_general = notes_aggregate['note_general_avg']
-            notes.note_sockets = notes_aggregate['note_sockets_avg']
-            notes.note_internet = notes_aggregate['note_internet_avg']
-            notes.note_silence = notes_aggregate['note_silence_avg']
-            notes.note_menu_price = notes_aggregate['note_menu_price_avg']
-            notes.note_daily_price = notes_aggregate['note_daily_price_avg']
-            notes.save()
-        else:
-            Notes.objects.create(
-                workspace=workspace,
-                note_general=notes_aggregate['note_general_avg'],
-                note_sockets=notes_aggregate['note_sockets_avg'],
-                note_internet=notes_aggregate['note_internet_avg'],
-                note_silence=notes_aggregate['note_silence_avg'],
-                note_menu_price=notes_aggregate['note_menu_price_avg'],
-                note_daily_price=notes_aggregate['note_daily_price_avg']
-            )

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Trip, Workspace, Rating, Notes
+from .models import Trip, Workspace, Rating, Notes, WorkspacePhoto
+from django.forms.models import inlineformset_factory
 
 class TripForm(forms.ModelForm):
     class Meta:
@@ -26,3 +27,10 @@ class ReviewForm(forms.ModelForm):
         labels = {
             'comment': 'Comment',
         }
+
+class ReviewPhotoForm(forms.ModelForm):
+    class Meta:
+        model = WorkspacePhoto
+        fields = ['file']
+
+ReviewPhotoFormSet = forms.inlineformset_factory(Rating, WorkspacePhoto, form=ReviewPhotoForm, extra=5, max_num=5, can_delete=True)

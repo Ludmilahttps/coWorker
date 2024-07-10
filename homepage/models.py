@@ -26,22 +26,13 @@ class Workspace(models.Model):
     workingHours = models.CharField(max_length=100, blank=True, null=True)
     averageRating = models.FloatField(blank=True, null=True)
     owner = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True, blank=True)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
-class WorkspacePhoto(models.Model):
-    workspace = models.ForeignKey(Workspace, related_name='photos', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    file = models.CharField(max_length=255)
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = 'WorkspacePhoto'
-
 class Notes(models.Model):
-    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
     note_sockets = models.IntegerField()
     note_internet = models.IntegerField()
     note_silence = models.IntegerField()
@@ -61,15 +52,6 @@ class ReviewVote(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     review = models.ForeignKey(Rating, related_name='votes', on_delete=models.CASCADE)
     vote_type = models.CharField(max_length=10, choices=[('upvote', 'Upvote'), ('downvote', 'Downvote')])
-    date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'review')
-
-class RatingComment(models.Model):
-    rating = models.ForeignKey(Rating, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    comment = models.TextField()
     date = models.DateTimeField(default=timezone.now)
     
 class Event(models.Model):
@@ -82,17 +64,24 @@ class Event(models.Model):
     slots = models.IntegerField()
     status = models.CharField(max_length=20)
 
-class Subscription(models.Model):
+class WorkspacePhoto(models.Model):
+    workspace = models.ForeignKey(Workspace, related_name='photos', on_delete=models.CASCADE)
+    review = models.ForeignKey('Rating', related_name='photos', on_delete=models.CASCADE)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20)
+    file = models.FileField(upload_to='workspace_photos/')
+    date_added = models.DateTimeField(auto_now_add=True)
 
-class Report(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    content_type = models.CharField(max_length=50)
-    reason = models.TextField()
-    date = models.DateTimeField(default=timezone.now)
+# class Subscription(models.Model):
+#     user = models.ForeignKey(Users, on_delete=models.CASCADE)
+#     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+#     status = models.CharField(max_length=20)
+
+# class Report(models.Model):
+#     user = models.ForeignKey(Users, on_delete=models.CASCADE)
+#     content_type = models.CharField(max_length=50)
+#     reason = models.TextField()
+#     date = models.DateTimeField(default=timezone.now)
 
 class EventUser(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
