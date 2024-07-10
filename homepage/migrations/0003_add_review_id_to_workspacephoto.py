@@ -6,7 +6,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('homepage', '0002_create_reviewvote_table'),  # Ajuste para depender da última migração aplicada
+        ('homepage', '0002_create_reviewvote_table'),
     ]
 
     operations = [

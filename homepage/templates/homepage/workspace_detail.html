@@ -214,6 +214,9 @@
                 
                 <div class="reviews">
                     {% if reviews %}
+                        <button class="add-space-button" onclick="location.href='{% url 'add_review' workspace.id %}'">
+                            {% trans "Add a Review" %}
+                        </button>
                         {% for review in reviews %}
                         <div class="card mt-3">
                             <div class="card-body">
@@ -551,6 +554,12 @@
         font-size: 34px;
         right: 0px;
         position: relative;
+        ion-icon {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        ion-icon:hover {
+            transform: translateY(-5px);
+        }
     }
 
     .like-button .liked {
@@ -768,29 +777,54 @@
 
             .geral-info {
                 width: 30%;
-                background-color: aqua;
                 display: flex;
                 flex-direction: column;
                 align-items: start;
                 justify-content: start;
+                padding: 20px;
+                border-radius: 35px 0px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-
+                .geral-info p {
+                    font-family: 'Lato', sans-serif;
+                    color: black;
+                    margin: 0px;
+                }
                 .star-counts {
                     list-style-type: none;
                     display: flex;
                     flex-direction: column;
                     align-items: start;
                     justify-content: start;
-                    background-color: chartreuse;
+                    padding-left: 0;
                 }
             }
             .reviews {
                 width: 70%;
-                border-radius: 35px 0px;
-                margin: 10px;
                 padding: 10px;
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-
+                
+                .add-space-button {
+                    width: 100%;
+                    height: 58px;
+                    background-color: #203354;
+                    border-radius: 35px 0px;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    font-weight: bold;
+                    font-family: 'Montserrat', sans-serif;
+                    white-space: nowrap;
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                }
+                .add-space-button:hover {
+                    background-color: #365d77;
+                }
+                .card {
+                    border-radius: 35px 0px;
+                    padding: 10px;
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                }
                 .title-review {
                     width: 100%;
                     display: flex;
