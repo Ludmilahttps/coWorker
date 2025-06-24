@@ -1,61 +1,44 @@
 {% load i18n %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="{{ selected_language }}">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "CoWorkers" %}</title>
+    <title>Olympus</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5WEC5Z3NXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-5WEC5Z3NXX');
-</script>
 
 <body>
     <header class="navbar">
         <div class="logo-container">
-            <img src="{% static 'homepage/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
+            <img src="{% static 'homepage/logo.png' %}" alt="Logo" class="logo">
             <span class="site-name">CoWorkers</span>
         </div>
         <nav>
             <ul> 
-                <li><a href="{% url 'discover' %}">{% trans "Discover" %}</a></li> 
-                <li><a href="{% url 'review' %}">{% trans "Favorite" %}</a></li> 
+                <li><a href="discover">Discover</a></li> 
+                <li><a href="review">Favorite</a></li> 
                 <!-- <li><a href="{% url 'events' %}">{% trans "Events" %}</a></li>  -->
-                <li><a href="{% url 'trips' %}">{% trans "Trips" %}</a></li> 
+                <li><a href="trips">Trips</a></li> 
                 <!-- <li><a href="{% url 'more' %}">{% trans "Blog" %}</a></li>  -->
-                <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                <li><a href="{% url 'profile' %}">{% trans "Profile" %}</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="profile">Profile</a></li>
             </ul>
         </nav>        
         <div class="user-controls">
-            <a href="?toggle_dropdown=true" class="country" id="country">{{ selected_language_name }}</a>
-            {% if dropdown_visible %}
-            <div class="country-dropdown" id="country-dropdown">
-                {% for language in languages %}
-                <a href="?language={{ language.code }}">{{ language.name_local }}</a>
-                {% endfor %}
-            </div>
-            {% endif %}
             <nav>
                 <ul>
                     {% if user.is_authenticated %}
                         <li>
-                            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                            <form action="logout" method="POST" style="display: inline;">
                                 {% csrf_token %}
                                 <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer; color: inherit;">Logout</button>
                             </form>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">Sign In</a></li>
+                        <li><a href="login">Sign In</a></li>
                     {% endif %}
                 </ul>
             </nav>
