@@ -116,8 +116,7 @@ def handle_view_errors(view_func):
 
 @handle_view_errors
 def home(request):
-    context = get_context_data(request)
-    return render(request, 'homepage/discover.html', context)
+    return render(request, 'homepage/discover.html')
 
 @handle_view_errors
 def events(request):
