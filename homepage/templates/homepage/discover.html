@@ -6,18 +6,6 @@
 
 {% block content %}
 <section class="discover-section">
-    <div class="search-bar">
-        <div class="search-input-container position-relative">
-            <input type="text" class="search-input" placeholder="{% trans 'You can search by: Name, Description, City, State, Category' %}" id="search-input">
-            <div class="input-group-append">
-                <button class="btn btn-outline-warning btn-lg" type="button"><ion-icon class="search" name="search"></ion-icon></button>
-            </div>
-        </div>
-        <button class="add-space-button" onclick="location.href='{% url 'add_workspace' %}'">
-            {% trans "Add New Space" %}
-        </button>
-    </div>
-
     <div class="coming-soon-section">
         <h2>{% trans "Em breve!" %}</h2>
         <img src="{% static 'images/placeholder_coming_soon.png' %}" alt="Em breve" class="coming-soon-image" />
@@ -25,38 +13,6 @@
         <a href="https://www.instagram.com/olympusco/?utm_source=ig_web_button_share_sheet" target="_blank" class="instagram-link">
             <ion-icon name="logo-instagram"></ion-icon> @OlympusCo
         </a>
-    </div>
-    
-    <div class="categories-section">
-        <h2>{% trans "Categories" %}</h2>
-        <div class="carousel">
-            {% for category in categories %}
-            <div class="carousel-item">
-                <img src="{% static 'images/category.svg' %}" alt="{{ category.name }}" class="category-image" />
-                <p>{{ category.name }}</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div class="workspaces-section">
-        <h2>{% trans "Workspaces" %}</h2>
-        <div class="workspaces-container">
-            {% for workspace in workspaces %}
-            <a href="{% url 'workspace_detail' workspace.id %}" class="workspace-card">
-                {% if workspace.photos.exists %}
-                    <img src="{{ workspace.photos.first.file.url }}" alt="{{ workspace.name }}" class="workspace-image" />
-                {% else %}
-                    <img src="{% static 'images/no_images.svg' %}" alt="{{ workspace.name }}" class="workspace-image" />
-                {% endif %}
-                <div class="workspace-info">
-                    <h3>{{ workspace.name }}</h3>
-                    <p class="workspace-name">{{ workspace.category.name }}</p>
-                </div>
-                <p class="workspace-location">{{ workspace.city }}, {{ workspace.state }}</p>
-            </a>
-            {% endfor %}
-        </div>
     </div>
 </section>
 
@@ -209,10 +165,6 @@ h2 {
     text-align: center;
     margin-top: 50px;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px; /* Limita a largura para melhor visualização */
 }
