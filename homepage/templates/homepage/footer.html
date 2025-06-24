@@ -1,38 +1,36 @@
-{% load i18n %}
 <footer>
     <div class="footer-container">
         <div class="footer-section">
-            <h4>{% trans "About" %}</h4>
-            <p>{% blocktrans %}CoWorkers connects remote and hybrid professionals with workspaces around the world. Our mission is to provide flexible and efficient work environments.{% endblocktrans %}</p>
+            <h4>About</h4>
+            <p>CoWorkers connects remote and hybrid professionals with workspaces around the world. Our mission is to provide flexible and efficient work environments.</p>
         </div>
         <div class="footer-section">
-            <h4>{% trans "Customer Support" %}</h4>
+            <h4>Customer Support</h4>
             <ul>
-                <li><a href="/support">{% trans "Support" %}</a></li>
-                <li><a href="/faq">{% trans "FAQs" %}</a></li>
-                <li><a href="/return-policy">{% trans "Return Policy" %}</a></li>
+                <li><a href="/support">Support</a></li>
+                <li><a href="/faq">FAQs</a></li>
+                <li><a href="/return-policy">Return Policy</a></li>
             </ul>
         </div>
         <div class="footer-section">
-            <h4>{% trans "Newsletter" %}</h4>
+            <h4>Newsletter</h4>
             <form class="newsletter-form" method="post">
-                {% csrf_token %}
                 <input type="email" name="email" placeholder="{% trans 'Your email address' %}">
-                <button type="submit">{% trans "Subscribe" %}</button>
+                <button type="submit">Subscribe</button>
             </form>
         </div>
         <div class="footer-section">
-            <h4>{% trans "Blog" %}</h4>
+            <h4>Blog</h4>
             <ul>
-                <li><a href="/blog/latest">{% trans "Latest Posts" %}</a></li>
-                <li><a href="/blog/category">{% trans "Categories" %}</a></li>
+                <li><a href="/blog/latest">Latest Posts</a></li>
+                <li><a href="/blog/category">Categories</a></li>
             </ul>
         </div>
         <div class="footer-section">
-            <h4>{% trans "Contact" %}</h4>
-            <p>{% trans "Email" %}: contato@coworkers.com</p>
-            <p>{% trans "Phone" %}: (11) 1234-5678</p>
-            <p>{% trans "Address" %}: Rua Exemplo, 123, São Paulo, SP</p>
+            <h4>Contact</h4>
+            <p>Email: contato@coworkers.com</p>
+            <p>Phone: (11) 1234-5678</p>
+            <p>Address: Rua Exemplo, 123, São Paulo, SP</p>
         </div>
     </div>
 </footer>
