@@ -8,7 +8,7 @@
 <section class="discover-section">
     <div class="coming-soon-section">
         <h2>{% trans "Em breve!" %}</h2>
-        <img src="{% static 'images/placeholder_coming_soon.png' %}" alt="Em breve" class="coming-soon-image" />
+        <h6>OLYMPUS Co</h6>
         <p class="follow-us-text">{% trans "Nos siga no Instagram para novidades!" %}</p>
         <a href="https://www.instagram.com/olympusco/?utm_source=ig_web_button_share_sheet" target="_blank" class="instagram-link">
             <ion-icon name="logo-instagram"></ion-icon> @OlympusCo
@@ -163,7 +163,7 @@ h2 {
 /* Novo estilo para a seção "Em breve" */
 .coming-soon-section {
     text-align: center;
-    margin-top: 50px;
+    margin: 50px;
     padding: 20px;
     width: 100%;
     max-width: 600px; /* Limita a largura para melhor visualização */
@@ -173,6 +173,12 @@ h2 {
     color: #203354;
     font-size: 2.5em;
     margin-bottom: 20px;
+}
+
+.coming-soon-section h2 {
+    color: #203354;
+    font-size: 2.5em;
+    margin-bottom: 40px;
 }
 
 .coming-soon-image {
